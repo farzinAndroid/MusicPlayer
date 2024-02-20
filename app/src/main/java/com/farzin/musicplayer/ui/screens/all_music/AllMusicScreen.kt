@@ -83,7 +83,7 @@ fun SwipeRefreshSection(allMusicViewModel: AllMusicViewModel, navController: Nav
             if (!refreshState.isRefreshing) {
                 items(allMusic) {
                     MusicItem(music = it, onMusicClicked = {
-                        Log.e("TAG", it.thumbnail)
+
                     })
                 }
             }

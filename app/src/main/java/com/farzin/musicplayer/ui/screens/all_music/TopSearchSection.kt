@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Icon
@@ -28,9 +29,9 @@ fun TopSearchSection(
 
     Row(
         modifier = Modifier
+            .statusBarsPadding()
             .fillMaxWidth()
-            .fillMaxHeight(0.10f)
-            .background(MaterialTheme.colorScheme.mainBackground),
+            .fillMaxHeight(0.10f),
         verticalAlignment = Alignment.CenterVertically
     ) {
 

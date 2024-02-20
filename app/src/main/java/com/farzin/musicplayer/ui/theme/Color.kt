@@ -17,7 +17,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val ColorScheme.searchBarColor: Color
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0xFF4B4B4B) else Color(0xFFCECECE)
+    get() = if (isSystemInDarkTheme()) Color(0xFF2B2B2B) else Color(0xFFEBEBEB)
 
 val ColorScheme.mainBackground: Color
     @Composable

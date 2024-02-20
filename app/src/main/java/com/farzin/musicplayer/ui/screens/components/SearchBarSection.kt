@@ -32,7 +32,7 @@ fun SearchBarSection(
         modifier = modifier,
         shape = Shapes().large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.searchBarColor),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(0.dp)
     ) {
 
         Row(
