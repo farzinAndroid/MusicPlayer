@@ -26,7 +26,7 @@ import com.farzin.musicplayer.ui.theme.darkText
 @Composable
 fun MainScreenTabLayout(
     navController: NavController,
-    paddingValues: PaddingValues,
+    paddingValues: PaddingValues = PaddingValues(),
     onSongSelected:(Music)->Unit
 ) {
 
