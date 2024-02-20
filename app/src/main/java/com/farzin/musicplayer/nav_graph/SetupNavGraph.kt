@@ -1,11 +1,11 @@
 package com.farzin.musicplayer.nav_graph
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.farzin.musicplayer.ui.screens.all_music.AllMusicScreen
+import com.farzin.musicplayer.ui.screens.main_screen.MainScreen
+import com.farzin.musicplayer.ui.screens.search_screen.SearchScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -17,9 +17,12 @@ fun SetupNavGraph(navController: NavHostController) {
     ){
 
         composable(Screens.AllMusic.route){
-            AllMusicScreen(navController = navController)
+            MainScreen(navController = navController)
         }
 
+        composable(Screens.Search.route){
+            SearchScreen(navController = navController)
+        }
     }
 
 }

@@ -14,25 +14,21 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.rememberNavController
 import com.farzin.musicplayer.nav_graph.SetupNavGraph
+import com.farzin.musicplayer.ui.components.ChangeStatusBarColor
 import com.farzin.musicplayer.ui.theme.MusicPlayerTheme
+import com.farzin.musicplayer.ui.theme.darkText
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT
-            )
-        )
         super.onCreate(savedInstanceState)
         setContent {
             MusicPlayerTheme {
-
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier
@@ -42,6 +38,7 @@ class MainActivity : ComponentActivity() {
                     checkPermissions()
 
                     val navController = rememberNavController()
+                    ChangeStatusBarColor()
 
                     SetupNavGraph(navController = navController)
                 }

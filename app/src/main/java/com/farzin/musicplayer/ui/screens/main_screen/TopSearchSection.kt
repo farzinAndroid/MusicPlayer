@@ -1,6 +1,5 @@
-package com.farzin.musicplayer.ui.screens.all_music
+package com.farzin.musicplayer.ui.screens.main_screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,14 +11,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.farzin.musicplayer.ui.screens.components.SearchBarSection
-import com.farzin.musicplayer.ui.theme.mainBackground
+import com.farzin.musicplayer.ui.components.SearchBarSection
 
 @Composable
 fun TopSearchSection(

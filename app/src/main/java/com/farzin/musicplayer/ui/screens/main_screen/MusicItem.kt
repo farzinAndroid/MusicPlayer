@@ -1,7 +1,6 @@
-package com.farzin.musicplayer.ui.screens.all_music
+package com.farzin.musicplayer.ui.screens.main_screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -15,22 +14,18 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
-import com.farzin.musicplayer.ui.screens.components.MySpacerHeight
+import com.farzin.musicplayer.ui.components.MySpacerHeight
 import com.farzin.musicplayer.ui.theme.darkText
 
 @Composable
@@ -41,6 +36,9 @@ fun MusicItem(music: Music, onMusicClicked: () -> Unit) {
         error = if (isSystemInDarkTheme()) painterResource(R.drawable.music_logo_light) else
             painterResource(R.drawable.music_logo_dark),
     )
+
+
+    MySpacerHeight(height = 8.dp)
 
     Row(
         modifier = Modifier

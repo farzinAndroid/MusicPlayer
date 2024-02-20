@@ -21,7 +21,7 @@ val ColorScheme.searchBarColor: Color
 
 val ColorScheme.mainBackground: Color
     @Composable
-    get() = if (isSystemInDarkTheme()) Color(0xFF181818) else Color(0xFFCECECE)
+    get() = if (isSystemInDarkTheme()) Color(0xFF000000) else Color(0xFFFFFFFF)
 
 val ColorScheme.darkText: Color
     @Composable

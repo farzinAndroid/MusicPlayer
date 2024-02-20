@@ -1,4 +1,4 @@
-package com.farzin.musicplayer.ui.screens.components
+package com.farzin.musicplayer.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
