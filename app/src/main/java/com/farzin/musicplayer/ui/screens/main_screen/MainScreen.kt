@@ -53,12 +53,10 @@ fun MainScreen(
     var music by remember { mutableStateOf(Music()) }
     val context = LocalContext.current
 
-    // Initialize ExoPlayer outside composable to maintain a single instance
-    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+
 
     LaunchedEffect(music) {
-        val mediaSource = music.contentUri?.let { MediaItem.fromUri(it) }
-        mainScreenViewModel.playMusic(mediaSource)
+        mainScreenViewModel.playMusic(music)
     }
 
 

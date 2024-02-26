@@ -26,8 +26,13 @@ class MainScreenViewModel @Inject constructor(
     }
 
 
-    fun playMusic(mediaSource: MediaItem?){
-        playerRepository.playMusic(mediaSource)
+    private var currentMediaSource: MediaItem? = null
+    fun playMusic(music: Music){
+        val mediaSource = music.contentUri?.let { MediaItem.fromUri(it) }
+        if (mediaSource != currentMediaSource) {
+            currentMediaSource = mediaSource
+            playerRepository.playMusic(mediaSource)
+        }
     }
 
 
