@@ -29,19 +29,42 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.nav_graph.Screens
+import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavController,
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
 ) {
+
+
+    var music by remember { mutableStateOf(Music()) }
+    val context = LocalContext.current
+
+    // Initialize ExoPlayer outside composable to maintain a single instance
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+
+    LaunchedEffect(music) {
+        val mediaSource = music.contentUri?.let { MediaItem.fromUri(it) }
+        mainScreenViewModel.playMusic(mediaSource)
+    }
+
+
+
+
+
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -51,9 +74,6 @@ fun MainScreen(
         SheetValue.Expanded -> {true}
         SheetValue.PartiallyExpanded -> {false}
     }
-
-
-    var music by remember { mutableStateOf(Music()) }
 
 
     val bottomSheetShape = if (scaffoldState.bottomSheetState.hasExpandedState) {
@@ -100,7 +120,7 @@ fun MainScreen(
                             if (music.name.isEmpty()) {
                                 Text(text = isExpanded.toString())
                             } else {
-                                Text(text = music.name)
+                                Text(text = music.duration.toString())
                             }
 
                         }

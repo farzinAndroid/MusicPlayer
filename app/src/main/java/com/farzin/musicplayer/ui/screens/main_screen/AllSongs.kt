@@ -14,36 +14,42 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.farzin.musicplayer.data.model.Music
-import com.farzin.musicplayer.viewmodels.AllMusicViewModel
+import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 
 
 @Composable
 fun AllSongs(
-    allMusicViewModel: AllMusicViewModel = hiltViewModel(),
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
     navController: NavController,
     paddingValues: PaddingValues,
     onSongSelected:(Music)->Unit
 ) {
 
 
-    val allMusic by allMusicViewModel.musicList.collectAsState(emptyList())
+    val allMusic by mainScreenViewModel.musicList.collectAsState(emptyList())
     val context = LocalContext.current
     LaunchedEffect(true){
-        allMusicViewModel.getAllMusic(context)
+        mainScreenViewModel.getAllMusic()
     }
 //    val refreshState = rememberPullToRefreshState()
 //
 //
 //    LaunchedEffect(refreshState.isRefreshing) {
-//        allMusicViewModel.getAllMusic(context)
+//        mainScreenViewModel.getAllMusic(context)
 //
 //        if (refreshState.isRefreshing) {
 //            refreshState.startRefresh()
-//            allMusicViewModel.getAllMusic(context)
+//            mainScreenViewModel.getAllMusic(context)
 //            delay(1000)
 //            refreshState.endRefresh()
 //        }
 //    }
+
+
+
+
+
+
 
 
     LazyColumn(
