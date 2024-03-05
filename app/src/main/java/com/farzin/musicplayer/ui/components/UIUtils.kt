@@ -7,8 +7,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.farzin.musicplayer.ui.theme.darkText
-import com.farzin.musicplayer.ui.theme.mainBackground
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 

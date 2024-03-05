@@ -72,7 +72,7 @@ dependencies {
     //hilt di
     implementation("com.google.dagger:hilt-android:2.50")
     ksp("com.google.dagger:hilt-compiler:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     //compose navigation
     implementation ("androidx.navigation:navigation-compose:2.7.7")
@@ -87,14 +87,25 @@ dependencies {
 
     //coil - load image from url
     implementation ("io.coil-kt:coil-compose:2.2.2")
-//
-//    // This dependency contains all the material icons
-//    implementation("androidx.compose.material:material-icons-extended:1.6.1")
+
+    // This dependency contains all the material icons
+    implementation("androidx.compose.material:material-icons-extended:1.6.2")
 
     //system ui controller
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
 
-    implementation("androidx.media3:media3-exoplayer:1.2.0")
-    implementation("androidx.media3:media3-ui:1.2.0")
+    //media 3
+    implementation("androidx.media3:media3-exoplayer:1.2.1")
+    implementation("androidx.media3:media3-ui:1.2.1")
+    implementation("androidx.media3:media3-datasource-okhttp:1.2.1")
+    implementation("androidx.media3:media3-session:1.2.1")
+    // Needed MediaSessionCompat.Token
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    // permission
+    implementation("com.google.accompanist:accompanist-permissions:0.30.0")
 
 }

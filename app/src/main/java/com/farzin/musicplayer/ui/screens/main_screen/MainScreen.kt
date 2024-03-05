@@ -1,6 +1,5 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,13 +13,10 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,14 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,12 +45,6 @@ fun MainScreen(
 
     var music by remember { mutableStateOf(Music()) }
     val context = LocalContext.current
-
-
-
-    LaunchedEffect(music) {
-        mainScreenViewModel.playMusic(music)
-    }
 
 
 
@@ -115,7 +102,7 @@ fun MainScreen(
                             horizontalArrangement = Arrangement.Start
                         ) {
 
-                            if (music.name.isEmpty()) {
+                            if (music.displayName.isEmpty()) {
                                 Text(text = isExpanded.toString())
                             } else {
                                 Text(text = music.duration.toString())

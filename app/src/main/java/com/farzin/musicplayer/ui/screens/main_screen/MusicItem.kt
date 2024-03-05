@@ -1,6 +1,5 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -17,17 +16,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
 import coil.compose.rememberAsyncImagePainter
 import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
@@ -41,7 +35,7 @@ fun MusicItem(music: Music, onMusicClicked: () -> Unit) {
 
 
     val imagePainter = rememberAsyncImagePainter(
-        model = music.thumbnail,
+        model = music.albumArt,
         error = if (isSystemInDarkTheme()) painterResource(R.drawable.music_logo_light) else
             painterResource(R.drawable.music_logo_dark),
     )
@@ -77,7 +71,7 @@ fun MusicItem(music: Music, onMusicClicked: () -> Unit) {
             Column(modifier = Modifier.weight(0.95f)) {
 
                 Text(
-                    text = music.name,
+                    text = music.title,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = MaterialTheme.typography.titleSmall,
@@ -87,7 +81,7 @@ fun MusicItem(music: Music, onMusicClicked: () -> Unit) {
                 MySpacerHeight(height = 4.dp)
 
                 Text(
-                    text = music.albumName,
+                    text = music.artist,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodySmall,

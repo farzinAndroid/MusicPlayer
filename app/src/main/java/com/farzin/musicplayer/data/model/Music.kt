@@ -1,12 +1,14 @@
 package com.farzin.musicplayer.data.model
 
-import android.net.Uri
+
 
 data class Music(
+    val uri: String = "",
+    val displayName:String = "",
     val id:Long = 0L,
-    val name:String = "",
-    val albumName:String = "",
+    val artist:String = "",
+    val data:String = "",
     val duration:Int = 0,
-    val contentUri:Uri? = null,
-    val thumbnail:String = "",
+    val title:String = "",
+    val albumArt:String = "",
 )

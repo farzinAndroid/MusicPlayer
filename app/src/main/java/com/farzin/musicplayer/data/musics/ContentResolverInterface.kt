@@ -1,8 +1,8 @@
-package com.farzin.musicplayer.repository
+package com.farzin.musicplayer.data.musics
 
 import com.farzin.musicplayer.data.model.Music
 
-interface MainRepositoryInterface {
+interface ContentResolverInterface {
 
     suspend fun getAllMusic() : List<Music>
 
