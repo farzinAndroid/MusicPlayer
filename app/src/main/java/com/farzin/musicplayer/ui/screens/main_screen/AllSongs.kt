@@ -4,17 +4,21 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
+import com.farzin.musicplayer.viewmodels.UIEvents
+import com.farzin.musicplayer.viewmodels.UIState
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -25,12 +29,10 @@ fun AllSongs(
     onSongSelected:(Music)->Unit
 ) {
 
-
-    val allMusic by mainScreenViewModel.musicList.collectAsState(emptyList())
+    val musicList by mainScreenViewModel.musicList.collectAsState()
+    val currentSelectedSong by mainScreenViewModel.currentSelectedSong.collectAsState(initial = Music())
     val context = LocalContext.current
-    LaunchedEffect(true){
-        mainScreenViewModel.getAllMusic()
-    }
+    val scope = rememberCoroutineScope()
 //    val refreshState = rememberPullToRefreshState()
 //
 //
@@ -45,18 +47,31 @@ fun AllSongs(
 //        }
 //    }
 
-
-    LazyColumn(
-        modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()
-    ) {
-        items(allMusic) {
-            MusicItem(music = it, onMusicClicked = {
-                onSongSelected(it)
-            })
+    val uiState by mainScreenViewModel.uiState.collectAsState()
+    when(uiState){
+        UIState.Initial -> {
+            Text(text = "Loading")
         }
+        UIState.Ready -> {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
+                itemsIndexed(musicList) {index,music->
+                    MusicItem(music = music, onMusicClicked = {
+                        onSongSelected(music)
+                        scope.launch {
+                            mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                            mainScreenViewModel.startService(context)
+                        }
+                    })
+                }
 
+            }
+        }
     }
+
+
 
 }

@@ -76,6 +76,7 @@ class NotificationManager @Inject constructor(
             )
             .build()
             .also {
+                it.setMediaSessionToken(mediaSession.sessionCompatToken)
                 it.setPriority(NotificationCompat.PRIORITY_LOW)
                 it.setUseNextActionInCompactView(true)
                 it.setUsePreviousActionInCompactView(true)

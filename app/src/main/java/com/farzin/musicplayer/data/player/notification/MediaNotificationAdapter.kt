@@ -18,7 +18,7 @@ class MediaNotificationAdapter @Inject constructor(
     private val pendingIntent: PendingIntent?
 ) : PlayerNotificationManager.MediaDescriptionAdapter {
     override fun getCurrentContentTitle(player: Player): CharSequence =
-        player.mediaMetadata.title ?: "Unknown"
+        player.mediaMetadata.albumTitle ?: "Unknown"
 
     override fun createCurrentContentIntent(player: Player): PendingIntent?=pendingIntent
 

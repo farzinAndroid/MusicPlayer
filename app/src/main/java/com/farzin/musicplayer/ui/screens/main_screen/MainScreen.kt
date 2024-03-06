@@ -46,11 +46,6 @@ fun MainScreen(
     var music by remember { mutableStateOf(Music()) }
     val context = LocalContext.current
 
-
-
-
-
-
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 

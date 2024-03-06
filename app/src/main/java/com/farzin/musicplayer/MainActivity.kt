@@ -46,12 +46,17 @@ class MainActivity : ComponentActivity() {
             if (ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_MEDIA_AUDIO
+                ) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(
                         Manifest.permission.READ_MEDIA_AUDIO,
+                        Manifest.permission.POST_NOTIFICATIONS
                     ),
                     1
                 )

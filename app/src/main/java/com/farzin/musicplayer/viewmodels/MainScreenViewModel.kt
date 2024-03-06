@@ -1,11 +1,15 @@
 package com.farzin.musicplayer.viewmodels
 
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.data.player.service.PlayerEvent
+import com.farzin.musicplayer.data.player.service.SongService
 import com.farzin.musicplayer.data.player.service.SongServiceHandler
 import com.farzin.musicplayer.data.player.service.SongState
 import com.farzin.musicplayer.repository.SongRepository
@@ -34,6 +38,10 @@ class MainScreenViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<UIState>(UIState.Initial)
     val uiState = _uiState.asStateFlow()
+
+    init {
+        getAllMusic()
+    }
     init {
         viewModelScope.launch {
             songServiceHandler.songState.collectLatest { songState->
@@ -72,7 +80,7 @@ class MainScreenViewModel @Inject constructor(
         return String.format("%2d:%2d", minute, seconds)
     }
 
-    fun getAllMusic() {
+    private fun getAllMusic() {
         viewModelScope.launch {
             musicList.emit(songRepository.getAllSongs())
             setMediaItems()
@@ -124,6 +132,18 @@ class MainScreenViewModel @Inject constructor(
             songServiceHandler.setMediaItems(it)
         }
     }
+
+
+    fun startService(context: Context){
+        val intent = Intent(context,SongService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        }else{
+            context.startService(intent)
+        }
+    }
+
+
 
     override fun onCleared() {
         viewModelScope.launch {
