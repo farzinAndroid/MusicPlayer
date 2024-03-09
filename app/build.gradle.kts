@@ -108,4 +108,7 @@ dependencies {
     // permission
     implementation("com.google.accompanist:accompanist-permissions:0.30.0")
 
+    // palette api
+    implementation("androidx.palette:palette-ktx:1.0.0")
+
 }

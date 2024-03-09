@@ -9,12 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
 import com.farzin.musicplayer.viewmodels.UIState
@@ -26,13 +28,12 @@ fun AllSongs(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
     navController: NavController,
     paddingValues: PaddingValues,
-    onSongSelected:(Music)->Unit
 ) {
 
     val musicList by mainScreenViewModel.musicList.collectAsState()
-    val currentSelectedSong by mainScreenViewModel.currentSelectedSong.collectAsState(initial = Music())
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    var isServiceRunning by remember { mutableStateOf(false) }
 //    val refreshState = rememberPullToRefreshState()
 //
 //
@@ -48,22 +49,25 @@ fun AllSongs(
 //    }
 
     val uiState by mainScreenViewModel.uiState.collectAsState()
-    when(uiState){
+    when (uiState) {
         UIState.Initial -> {
             Text(text = "Loading")
         }
+
         UIState.Ready -> {
             LazyColumn(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                itemsIndexed(musicList) {index,music->
-                    MusicItem(music = music, onMusicClicked = {
-                        onSongSelected(music)
+                itemsIndexed(musicList) { index, music ->
+                    SongItem(music = music, onMusicClicked = {
                         scope.launch {
                             mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
-                            mainScreenViewModel.startService(context)
+                            if (!isServiceRunning) {
+                                mainScreenViewModel.startService(context)
+                                isServiceRunning = true
+                            }
                         }
                     })
                 }
@@ -71,7 +75,6 @@ fun AllSongs(
             }
         }
     }
-
 
 
 }

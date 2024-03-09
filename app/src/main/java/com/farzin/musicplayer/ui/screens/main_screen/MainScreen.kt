@@ -1,22 +1,16 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,13 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
-import kotlinx.coroutines.launch
+import com.farzin.musicplayer.viewmodels.UIEvents
+import kotlinx.coroutines.flow.collectLatest
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,16 +41,41 @@ fun MainScreen(
 ) {
 
 
-    var music by remember { mutableStateOf(Music()) }
+    var isPlaying by remember { mutableStateOf(false) }
+    var currentSelectedSong by remember {mutableStateOf<Music>(Music())}
+    LaunchedEffect(true){
+        mainScreenViewModel.isPlaying.collectLatest {
+            isPlaying = it
+        }
+
+    }
+    LaunchedEffect(true){
+        mainScreenViewModel.currentSelectedSong.collectLatest {
+            currentSelectedSong = it ?: Music(
+                "", "No song", 0L, "", "", 0, "No song"
+            )
+        }
+    }
+
+
+
     val context = LocalContext.current
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 
-    val isExpanded = when(scaffoldState.bottomSheetState.targetValue){
-        SheetValue.Hidden -> {false}
-        SheetValue.Expanded -> {true}
-        SheetValue.PartiallyExpanded -> {false}
+    val isExpanded = when (scaffoldState.bottomSheetState.targetValue) {
+        SheetValue.Hidden -> {
+            false
+        }
+
+        SheetValue.Expanded -> {
+            true
+        }
+
+        SheetValue.PartiallyExpanded -> {
+            false
+        }
     }
 
 
@@ -72,54 +95,57 @@ fun MainScreen(
         )
     }
 
+
+    val imagePainter = rememberAsyncImagePainter(
+        model = currentSelectedSong.albumArt,
+        error = if (isSystemInDarkTheme()) painterResource(R.drawable.music_logo_light) else
+            painterResource(R.drawable.music_logo_dark),
+    )
+
     BottomSheetScaffold(
         modifier = Modifier,
         sheetContent = {
-            if (!isExpanded){
+            if (!isExpanded) {
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .height(60.dp),
+                        .height(70.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .height(60.dp)
-                            .clickable { scope.launch { scaffoldState.bottomSheetState.expand() } },
-                        elevation = CardDefaults.cardElevation(0.dp),
-                    ) {
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable { scope.launch { scaffoldState.bottomSheetState.expand() } },
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-
-                            if (music.displayName.isEmpty()) {
-                                Text(text = isExpanded.toString())
-                            } else {
-                                Text(text = music.duration.toString())
-                            }
-
-                        }
-
-                    }
-
+                    SongController(
+                        onNextClicked = {
+                            mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
+                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                        },
+                        onPreviousClicked = {
+                            mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
+                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                        },
+                        onPauseClicked = {
+                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                        },
+                        currentSelectedSong = currentSelectedSong,
+                        isPlaying = isPlaying,
+                        imagePainter=imagePainter
+                    )
 
                 }
             }
 
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Hello")
-            }
+            // if not expanded (on full screen)
+            // show this
+            SongFullDetail(
+                progress = 0L,
+                onProgressBarClicked = {},
+                onNextClicked = { /*TODO*/ },
+                onPreviousClicked = { /*TODO*/ },
+                onPauseClicked = { /*TODO*/ },
+                currentSelectedSong = currentSelectedSong,
+                isPlaying = isPlaying,
+                onRepeatClicked = { /*TODO*/ },
+                imagePainter = imagePainter
+            )
 
 
         },
@@ -137,9 +163,6 @@ fun MainScreen(
             MainScreenTabLayout(
                 navController = navController,
                 paddingValues = paddingValues,
-                onSongSelected = {
-                    music = it
-                }
             )
         },
         sheetShadowElevation = 0.dp,

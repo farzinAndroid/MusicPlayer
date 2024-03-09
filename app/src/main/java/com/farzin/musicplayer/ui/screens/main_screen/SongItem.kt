@@ -29,7 +29,7 @@ import com.farzin.musicplayer.ui.components.MySpacerHeight
 import com.farzin.musicplayer.ui.theme.darkText
 
 @Composable
-fun MusicItem(music: Music, onMusicClicked: () -> Unit) {
+fun SongItem(music: Music, onMusicClicked: () -> Unit) {
 
 
 

@@ -32,7 +32,7 @@ class MainScreenViewModel @Inject constructor(
     val progress = MutableStateFlow(0f)
     val progressString = MutableStateFlow("00:00")
     val isPlaying = MutableStateFlow(false)
-    val currentSelectedSong = MutableStateFlow(Music())
+    val currentSelectedSong = MutableStateFlow<Music?>(null)
 
 
 

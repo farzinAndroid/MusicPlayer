@@ -75,7 +75,6 @@ class SongServiceHandler @Inject constructor(
     private suspend fun playOrPause() {
         if (exoPlayer.isPlaying) {
             exoPlayer.pause()
-            _songState.value = SongState.Playing(false)
             stopProgressUpdate()
         } else {
             exoPlayer.play()
@@ -88,7 +87,6 @@ class SongServiceHandler @Inject constructor(
         while (true) {
             delay(500)
             _songState.value = SongState.Progress(exoPlayer.currentPosition)
-            _songState.value = SongState.Playing(true)
         }
     }
 

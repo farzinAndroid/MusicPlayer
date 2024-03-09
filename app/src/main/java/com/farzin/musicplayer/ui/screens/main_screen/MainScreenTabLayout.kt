@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.farzin.musicplayer.R
-import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.data.model.TabItem
 import com.farzin.musicplayer.ui.theme.darkText
 
@@ -26,7 +25,6 @@ import com.farzin.musicplayer.ui.theme.darkText
 fun MainScreenTabLayout(
     navController: NavController,
     paddingValues: PaddingValues = PaddingValues(),
-    onSongSelected:(Music)->Unit
 ) {
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -75,9 +73,6 @@ fun MainScreenTabLayout(
                 AllSongs(
                     navController = navController,
                     paddingValues = paddingValues,
-                    onSongSelected = {
-                        onSongSelected(it)
-                    }
                 )
             }
             1->{
