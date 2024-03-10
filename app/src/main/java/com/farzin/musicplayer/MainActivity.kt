@@ -2,11 +2,17 @@ package com.farzin.musicplayer
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.graphics.Color.TRANSPARENT
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -20,13 +26,33 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(TRANSPARENT, TRANSPARENT) { resources ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    resources.configuration.isNightModeActive
+                } else {
+                    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                            Configuration.UI_MODE_NIGHT_YES
+                }
+            },
+            navigationBarStyle = SystemBarStyle.auto(TRANSPARENT, TRANSPARENT) { resources ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    resources.configuration.isNightModeActive
+                } else {
+                    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                            Configuration.UI_MODE_NIGHT_YES
+                }
+            }
+        )
         super.onCreate(savedInstanceState)
         setContent {
             MusicPlayerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .statusBarsPadding()
+                        .systemBarsPadding(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     checkPermissions()

@@ -1,5 +1,7 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +33,7 @@ import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,13 +61,16 @@ fun MainScreen(
     }
 
 
+//    val progress by mainScreenViewModel.progress.collectAsState()
+//    val progressString by mainScreenViewModel.progressString.collectAsState()
+//    val duration by mainScreenViewModel.duration.collectAsState()
 
     val context = LocalContext.current
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 
-    val isExpanded = when (scaffoldState.bottomSheetState.targetValue) {
+    var isExpanded = when (scaffoldState.bottomSheetState.targetValue) {
         SheetValue.Hidden -> {
             false
         }
@@ -79,7 +85,7 @@ fun MainScreen(
     }
 
 
-    val bottomSheetShape = if (scaffoldState.bottomSheetState.hasExpandedState) {
+    val bottomSheetShape = if (!isExpanded) {
         RoundedCornerShape(
             topStart = 28.dp,
             topEnd = 28.dp,
@@ -105,38 +111,44 @@ fun MainScreen(
     BottomSheetScaffold(
         modifier = Modifier,
         sheetContent = {
-            if (!isExpanded) {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(70.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    SongController(
-                        onNextClicked = {
-                            mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
-                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
-                        },
-                        onPreviousClicked = {
-                            mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
-                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
-                        },
-                        onPauseClicked = {
-                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
-                        },
-                        currentSelectedSong = currentSelectedSong,
-                        isPlaying = isPlaying,
-                        imagePainter=imagePainter
-                    )
 
+                AnimatedVisibility(
+                    visible = !isExpanded,
+                ) {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(70.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SongController(
+                            onNextClicked = {
+                                mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
+                                mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                            },
+                            onPreviousClicked = {
+                                mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
+                                mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                            },
+                            onPauseClicked = {
+                                mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                            },
+                            currentSelectedSong = currentSelectedSong,
+                            isPlaying = isPlaying,
+                            imagePainter=imagePainter
+                        )
+
+                    }
                 }
-            }
+
+
 
 
             // if not expanded (on full screen)
             // show this
             SongFullDetail(
-                progress = 0L,
+                progress = 0f,
+                progressString = "",
                 onProgressBarClicked = {},
                 onNextClicked = { /*TODO*/ },
                 onPreviousClicked = { /*TODO*/ },
@@ -144,7 +156,13 @@ fun MainScreen(
                 currentSelectedSong = currentSelectedSong,
                 isPlaying = isPlaying,
                 onRepeatClicked = { /*TODO*/ },
-                imagePainter = imagePainter
+                imagePainter = imagePainter,
+                onCloseClicked = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.partialExpand()
+                    }
+                    Log.e("TAG",isExpanded.toString())
+                }
             )
 
 
