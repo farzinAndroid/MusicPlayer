@@ -13,6 +13,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,14 +46,14 @@ fun MainScreen(
 
 
     var isPlaying by remember { mutableStateOf(false) }
-    var currentSelectedSong by remember {mutableStateOf<Music>(Music())}
-    LaunchedEffect(true){
+    var currentSelectedSong by remember { mutableStateOf<Music>(Music()) }
+    LaunchedEffect(true) {
         mainScreenViewModel.isPlaying.collectLatest {
             isPlaying = it
         }
 
     }
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         mainScreenViewModel.currentSelectedSong.collectLatest {
             currentSelectedSong = it ?: Music(
                 "", "No song", 0L, "", "", 0, "No song"
@@ -61,11 +62,11 @@ fun MainScreen(
     }
 
 
-//    val progress by mainScreenViewModel.progress.collectAsState()
-//    val progressString by mainScreenViewModel.progressString.collectAsState()
-//    val duration by mainScreenViewModel.duration.collectAsState()
-
     val context = LocalContext.current
+
+
+    val progress by mainScreenViewModel.progress.collectAsState()
+    val progressString by mainScreenViewModel.progressString.collectAsState()
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -112,47 +113,55 @@ fun MainScreen(
         modifier = Modifier,
         sheetContent = {
 
-                AnimatedVisibility(
-                    visible = !isExpanded,
+            AnimatedVisibility(
+                visible = !isExpanded,
+            ) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(70.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(70.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        SongController(
-                            onNextClicked = {
-                                mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
-                                mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
-                            },
-                            onPreviousClicked = {
-                                mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
-                                mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
-                            },
-                            onPauseClicked = {
-                                mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
-                            },
-                            currentSelectedSong = currentSelectedSong,
-                            isPlaying = isPlaying,
-                            imagePainter=imagePainter
-                        )
+                    SongController(
+                        onNextClicked = {
+                            mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
+                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                        },
+                        onPreviousClicked = {
+                            mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
+                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                        },
+                        onPauseClicked = {
+                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                        },
+                        currentSelectedSong = currentSelectedSong,
+                        isPlaying = isPlaying,
+                        imagePainter = imagePainter
+                    )
 
-                    }
                 }
-
-
+            }
 
 
             // if not expanded (on full screen)
             // show this
             SongFullDetail(
-                progress = 0f,
-                progressString = "",
-                onProgressBarClicked = {},
-                onNextClicked = { /*TODO*/ },
-                onPreviousClicked = { /*TODO*/ },
-                onPauseClicked = { /*TODO*/ },
+                progress = progress,
+                progressString = progressString,
+                onProgressBarClicked = {
+                    mainScreenViewModel.onUIEvent(UIEvents.SeekTo(it))
+                },
+                onNextClicked = {
+                    mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
+                    mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                },
+                onPreviousClicked = {
+                    mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
+                    mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                },
+                onPauseClicked = {
+                    mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                },
                 currentSelectedSong = currentSelectedSong,
                 isPlaying = isPlaying,
                 onRepeatClicked = { /*TODO*/ },
@@ -161,7 +170,7 @@ fun MainScreen(
                     scope.launch {
                         scaffoldState.bottomSheetState.partialExpand()
                     }
-                    Log.e("TAG",isExpanded.toString())
+                    Log.e("TAG", isExpanded.toString())
                 }
             )
 

@@ -196,8 +196,9 @@ fun SongFullDetail(
 
             SongProgressSection(
                 progress = progress,
-                onProgressClicked = onProgressBarClicked,
-                durationString = stampTimeToDuration(currentSelectedSong.duration.toLong())
+                onProgressBarClicked = onProgressBarClicked,
+                duration = currentSelectedSong.duration.toLong(),
+                progressString = progressString
             )
         }
 
@@ -205,13 +206,15 @@ fun SongFullDetail(
 
 }
 
-private fun stampTimeToDuration(duration: Long): String {
+fun stampTimeToDuration(duration: Long): String {
     if (duration <= 0) {
         return "--:--"
     }
     val totalSecond = floor(duration / 1E3).toInt()
-    val minute = totalSecond / 60
-    val remainingSeconds = totalSecond / (minute * 60)
-    return "$minute:$remainingSeconds"
+    val remainingSeconds = totalSecond % 60  // Get remaining seconds using modulo
+    val formattedRemainingSeconds =
+        if (remainingSeconds < 10) "0$remainingSeconds" else remainingSeconds
+    val minute = (totalSecond - remainingSeconds) / 60
+    return "$minute:$formattedRemainingSeconds"
 }
 
