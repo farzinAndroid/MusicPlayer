@@ -7,8 +7,9 @@ data class Music(
     val displayName:String = "",
     val id:Long = 0L,
     val artist:String = "",
-    val data:String = "",
+    val path:String = "",
     val duration:Int = 0,
     val title:String = "",
     val albumArt:String = "",
+    val amplitudes:List<Int> = emptyList(),
 )

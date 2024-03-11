@@ -25,6 +25,7 @@ import com.farzin.musicplayer.ui.theme.darkText
 fun MainScreenTabLayout(
     navController: NavController,
     paddingValues: PaddingValues = PaddingValues(),
+    onMusicClicked:(List<Int>)->Unit
 ) {
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -73,6 +74,7 @@ fun MainScreenTabLayout(
                 AllSongs(
                     navController = navController,
                     paddingValues = paddingValues,
+                    onMusicClicked = onMusicClicked
                 )
             }
             1->{

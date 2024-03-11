@@ -15,6 +15,7 @@ import javax.inject.Inject
 
 class ContentResolverHelper @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val songAmplitudeHelper: SongAmplitudeHelper,
 ) : ContentResolverInterface {
 
     private var cursor: Cursor? = null
@@ -91,10 +92,20 @@ class ContentResolverHelper @Inject constructor(
                             id
                         )
 
+                        val songAmplituds = songAmplitudeHelper.getSongAmplitudes(path)
+
                         // Stores column values and the contentUri in a local object
                         // that represents the media file.
                         musicTemp += Music(
-                            contentUri.toString(),displayName,id,artist,path,duration,title,artUri
+                            contentUri.toString(),
+                            displayName,
+                            id,
+                            artist,
+                            path,
+                            duration,
+                            title,
+                            artUri,
+                            songAmplituds
                         )
                     } while (mcursor.moveToNext())
 

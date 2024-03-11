@@ -12,6 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import linc.com.amplituda.Amplituda
 import javax.inject.Singleton
 
 @Module
@@ -49,5 +50,13 @@ object MainModule {
     ) = MediaSession
         .Builder(context,exoPlayer)
         .build()
+
+
+
+    @Provides
+    @Singleton
+    fun provideAmplituda(
+        @ApplicationContext context: Context,
+    ) = Amplituda(context)
 
 }

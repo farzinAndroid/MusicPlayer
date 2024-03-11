@@ -28,7 +28,10 @@ fun AllSongs(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
     navController: NavController,
     paddingValues: PaddingValues,
+    onMusicClicked:(List<Int>)->Unit
 ) {
+
+
 
     val musicList by mainScreenViewModel.musicList.collectAsState()
     val context = LocalContext.current
@@ -62,6 +65,7 @@ fun AllSongs(
             ) {
                 itemsIndexed(musicList) { index, music ->
                     SongItem(music = music, onMusicClicked = {
+                        onMusicClicked(music.amplitudes)
                         scope.launch {
                             mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
                             if (!isServiceRunning) {

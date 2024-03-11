@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.nav_graph.Screens
+import com.farzin.musicplayer.utils.SliderHelper.convertBackToRange
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
 import kotlinx.coroutines.flow.collectLatest
@@ -63,6 +64,7 @@ fun MainScreen(
 
     val context = LocalContext.current
 
+    var amplitudes by remember { mutableStateOf<List<Int>>(emptyList()) }
     val songProgress by mainScreenViewModel.songProgress.collectAsState()
     val sliderProgress by mainScreenViewModel.sliderProgress.collectAsState()
 
@@ -147,7 +149,7 @@ fun MainScreen(
                 songProgress = songProgress,
                 sliderProgress = sliderProgress,
                 onProgressBarClicked = {
-                    mainScreenViewModel.onUIEvent(UIEvents.SeekTo(it))
+                    mainScreenViewModel.onUIEvent(UIEvents.SeekTo(convertBackToRange(it)))
                 },
                 onNextClicked = {
                     mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
@@ -168,7 +170,8 @@ fun MainScreen(
                     scope.launch {
                         scaffoldState.bottomSheetState.partialExpand()
                     }
-                }
+                },
+                amplitudes = amplitudes
             )
 
 
@@ -187,6 +190,7 @@ fun MainScreen(
             MainScreenTabLayout(
                 navController = navController,
                 paddingValues = paddingValues,
+                onMusicClicked = {amplitudes = it}
             )
         },
         sheetShadowElevation = 0.dp,

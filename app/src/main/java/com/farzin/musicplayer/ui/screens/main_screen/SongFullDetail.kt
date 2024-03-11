@@ -54,6 +54,7 @@ fun SongFullDetail(
     onRepeatClicked: () -> Unit,
     imagePainter: Painter,
     onCloseClicked: () -> Unit,
+    amplitudes:List<Int>
 ) {
 
     val context = LocalContext.current
@@ -197,7 +198,9 @@ fun SongFullDetail(
                 songProgress = songProgress,
                 onProgressBarClicked = onProgressBarClicked,
                 duration = currentSelectedSong.duration.toLong(),
-                sliderProgress = sliderProgress
+                sliderProgress = sliderProgress,
+                amplitudes = amplitudes,
+                progressColor = backGroundColor
             )
         }
 
