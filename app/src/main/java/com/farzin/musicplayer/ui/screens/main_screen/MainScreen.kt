@@ -1,6 +1,5 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -64,9 +63,8 @@ fun MainScreen(
 
     val context = LocalContext.current
 
-
-    val progress by mainScreenViewModel.progress.collectAsState()
-    val progressString by mainScreenViewModel.progressString.collectAsState()
+    val songProgress by mainScreenViewModel.songProgress.collectAsState()
+    val sliderProgress by mainScreenViewModel.sliderProgress.collectAsState()
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -146,8 +144,8 @@ fun MainScreen(
             // if not expanded (on full screen)
             // show this
             SongFullDetail(
-                progress = progress,
-                progressString = progressString,
+                songProgress = songProgress,
+                sliderProgress = sliderProgress,
                 onProgressBarClicked = {
                     mainScreenViewModel.onUIEvent(UIEvents.SeekTo(it))
                 },
@@ -170,7 +168,6 @@ fun MainScreen(
                     scope.launch {
                         scaffoldState.bottomSheetState.partialExpand()
                     }
-                    Log.e("TAG", isExpanded.toString())
                 }
             )
 

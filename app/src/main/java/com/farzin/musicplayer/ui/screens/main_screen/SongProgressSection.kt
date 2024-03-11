@@ -3,23 +3,33 @@ package com.farzin.musicplayer.ui.screens.main_screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.farzin.musicplayer.ui.theme.darkText
+import com.farzin.musicplayer.utils.TimeHelper.formatSongProgress
+import com.farzin.musicplayer.utils.TimeHelper.stampTimeToDuration
+import com.linc.audiowaveform.AudioWaveform
+import com.linc.audiowaveform.model.AmplitudeType
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SongProgressSection(
-    progress:Float,
-    progressString:String,
+    songProgress:Long,
+    sliderProgress:Float,
     onProgressBarClicked:(Float)->Unit,
     duration:Long
 ) {
+
+    var amplitudeType by remember { mutableStateOf(AmplitudeType.Avg) }
 
     Row(
         modifier = Modifier
@@ -28,7 +38,7 @@ fun SongProgressSection(
         horizontalArrangement = Arrangement.Absolute.SpaceAround
     ) {
         Text(
-            text = formatDuration(progress,duration),
+            text = formatSongProgress(songProgress),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Normal,
             color = MaterialTheme.colorScheme.darkText,
@@ -36,16 +46,35 @@ fun SongProgressSection(
                 .weight(0.1f)
         )
 
-        Slider(
-            value =progress,
+        AudioWaveform(
+            progress = sliderProgress,
+            amplitudes = listOf(1,2,4,5),
+            amplitudeType = amplitudeType,
+            onProgressChange = { onProgressBarClicked(it) },
+            modifier = Modifier
+                .weight(0.8f)
+        )
+        /*Slider(
+            value =sliderProgress,
             onValueChange = { onProgressBarClicked(it) },
             valueRange = 0f..100f,
             modifier = Modifier
                 .weight(0.8f),
             colors = SliderDefaults.colors(
-                activeTickColor = MaterialTheme.colorScheme.darkText
-            )
-        )
+                thumbColor = MaterialTheme.colorScheme.darkText,
+                activeTrackColor = MaterialTheme.colorScheme.darkText,
+                inactiveTrackColor = Color.Gray,
+            ),
+            thumb = {
+                Spacer(
+                    Modifier
+                        .size(10.dp)
+                        .background(MaterialTheme.colorScheme.darkText, CircleShape)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+
+        )*/
 
         Text(
             text = stampTimeToDuration(duration),
@@ -57,20 +86,4 @@ fun SongProgressSection(
         )
 
     }
-}
-
-
-private fun formatDuration(progress: Float,duration:Long): String {
-    val totalDuration = duration
-    val totalSeconds = totalDuration / 1000 // Convert total duration to seconds
-    val currentSeconds = (progress * totalSeconds).toInt() // Calculate current seconds
-
-    val hours = currentSeconds / 3600 // Get hours (integer division)
-    val remainingSeconds = currentSeconds % 3600 // Get remaining seconds after hours
-
-    val minutes = remainingSeconds / 60 % 60 // Get minutes within 0-59 range
-    val seconds = remainingSeconds % 60
-
-    // Format the time string with leading zeros for hours, minutes, and seconds
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
 }

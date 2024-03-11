@@ -40,12 +40,11 @@ import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.ui.components.MySpacerHeight
 import com.farzin.musicplayer.ui.theme.mainBackground
 import com.farzin.musicplayer.utils.PaletteGenerator
-import kotlin.math.floor
 
 @Composable
 fun SongFullDetail(
-    progress: Float,
-    progressString: String,
+    songProgress: Long,
+    sliderProgress: Float,
     onProgressBarClicked: (Float) -> Unit,
     onNextClicked: () -> Unit,
     onPreviousClicked: () -> Unit,
@@ -195,10 +194,10 @@ fun SongFullDetail(
             MySpacerHeight(height = 10.dp)
 
             SongProgressSection(
-                progress = progress,
+                songProgress = songProgress,
                 onProgressBarClicked = onProgressBarClicked,
                 duration = currentSelectedSong.duration.toLong(),
-                progressString = progressString
+                sliderProgress = sliderProgress
             )
         }
 
@@ -206,15 +205,5 @@ fun SongFullDetail(
 
 }
 
-fun stampTimeToDuration(duration: Long): String {
-    if (duration <= 0) {
-        return "--:--"
-    }
-    val totalSecond = floor(duration / 1E3).toInt()
-    val remainingSeconds = totalSecond % 60  // Get remaining seconds using modulo
-    val formattedRemainingSeconds =
-        if (remainingSeconds < 10) "0$remainingSeconds" else remainingSeconds
-    val minute = (totalSecond - remainingSeconds) / 60
-    return "$minute:$formattedRemainingSeconds"
-}
+
 

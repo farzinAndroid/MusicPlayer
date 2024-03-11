@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,8 +28,8 @@ class MainScreenViewModel @Inject constructor(
 
     val musicList = MutableStateFlow<List<Music>>(emptyList())
     val duration = MutableStateFlow(0L)
-    val progress = MutableStateFlow(0f)
-    val progressString = MutableStateFlow("00:00")
+    val sliderProgress = MutableStateFlow(0f)
+    val songProgress = MutableStateFlow(0L)
     val isPlaying = MutableStateFlow(false)
     val currentSelectedSong = MutableStateFlow<Music?>(null)
 
@@ -53,7 +52,10 @@ class MainScreenViewModel @Inject constructor(
                         duration.emit(songState.duration)
                     }
                     is SongState.Playing -> isPlaying.emit(songState.isPlaying)
-                    is SongState.Progress -> calculateProgressValue(songState.progress)
+                    is SongState.Progress ->{
+                        calculateProgressValue(songState.progress)
+                        songProgress.emit(songState.progress)
+                    }
                     is SongState.CurrentPlayingSong -> {
                         currentSelectedSong.emit(musicList.value[songState.mediaItemIndex])
                     }
@@ -66,19 +68,13 @@ class MainScreenViewModel @Inject constructor(
     private fun calculateProgressValue(currentProgress: Long) {
         viewModelScope.launch {
             if (currentProgress > 0){
-                progress.emit((((currentProgress.toFloat()) / duration.value.toFloat()) * 100f))
-            }else progress.emit(0f)
-
-            progressString.emit( formatDuration(currentProgress))
+                sliderProgress.emit((((currentProgress.toFloat()) / duration.value.toFloat()) * 100f))
+            }else sliderProgress.emit(0f)
         }
 
     }
 
-    private fun formatDuration(duration: Long): String {
-        val minute = TimeUnit.MINUTES.convert(duration, TimeUnit.MILLISECONDS)
-        val seconds = (minute) - minute * TimeUnit.SECONDS.convert(1, TimeUnit.MINUTES)
-        return String.format("%2d:%2d", minute, seconds)
-    }
+
 
     private fun getAllMusic() {
         viewModelScope.launch {
@@ -109,7 +105,7 @@ class MainScreenViewModel @Inject constructor(
                 }
                 is UIEvents.UpdateProgress -> {
                     songServiceHandler.onPlayerEvents(PlayerEvent.UpdateProgress(uiEvents.newProgress))
-                    progress.emit(uiEvents.newProgress)
+                    sliderProgress.emit(uiEvents.newProgress)
                 }
             }
         }

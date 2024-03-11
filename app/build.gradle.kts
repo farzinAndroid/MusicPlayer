@@ -95,10 +95,10 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
 
     //media 3
-    implementation("androidx.media3:media3-exoplayer:1.2.1")
-    implementation("androidx.media3:media3-ui:1.2.1")
-    implementation("androidx.media3:media3-datasource-okhttp:1.2.1")
-    implementation("androidx.media3:media3-session:1.2.1")
+    implementation("androidx.media3:media3-exoplayer:1.3.0")
+    implementation("androidx.media3:media3-ui:1.3.0")
+    implementation("androidx.media3:media3-datasource-okhttp:1.3.0")
+    implementation("androidx.media3:media3-session:1.3.0")
     // Needed MediaSessionCompat.Token
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
@@ -110,5 +110,12 @@ dependencies {
 
     // palette api
     implementation("androidx.palette:palette-ktx:1.0.0")
+
+    // custom slider
+//    implementation("ir.mahozad.multiplatform:wavy-slider:1.1.0")
+    implementation ("com.github.lincollincol:compose-audiowaveform:1.1.1")
+
+    // amplitude
+    implementation ("com.github.lincollincol:amplituda:2.2.2")
 
 }
