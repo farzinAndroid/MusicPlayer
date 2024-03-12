@@ -11,5 +11,4 @@ data class Music(
     val duration:Int = 0,
     val title:String = "",
     val albumArt:String = "",
-    val amplitudes:List<Int> = emptyList(),
 )

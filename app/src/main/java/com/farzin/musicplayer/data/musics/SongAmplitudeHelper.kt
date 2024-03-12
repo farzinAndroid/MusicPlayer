@@ -10,21 +10,6 @@ class SongAmplitudeHelper @Inject constructor(
 
     fun getSongAmplitudes(path: String) : List<Int> {
 
-        /*amplituda.processAudio("/storage/emulated/0/Music/Linc - Amplituda.mp3")[
-            { result: AmplitudaResult<String?> ->
-            val amplitudesData = result.amplitudesAsList()
-            val amplitudesForFirstSecond =
-                result.amplitudesForSecond(1)
-            val duration = result.getAudioDuration(AmplitudaResult.DurationUnit.SECONDS)
-            val source = result.audioSource
-            val sourceType = result.inputAudioType
-        }, { exception: AmplitudaException? ->
-            if (exception is AmplitudaIOException) {
-                println("IO Exception!")
-            }
-        }
-        ]*/
-
         var amplitudeList = emptyList<Int>()
         val processAudio = amplituda.processAudio(path)
         processAudio[
