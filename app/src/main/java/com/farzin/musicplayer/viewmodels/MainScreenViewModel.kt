@@ -100,9 +100,14 @@ class MainScreenViewModel @Inject constructor(
                         seekPosition = ((duration.value * uiEvents.position) / 100f).toLong()
                     )
                 }
-                UIEvents.SeekToNext -> songServiceHandler.onPlayerEvents(PlayerEvent.SeekToNext)
+                UIEvents.SeekToNext -> {
+                    songServiceHandler.onPlayerEvents(PlayerEvent.SeekToNext)
+                    getSongAmplitudes(currentSelectedSong.value?.path!!)
+                }
                 UIEvents.SeekToPrevious -> songServiceHandler.onPlayerEvents(PlayerEvent.SeekToPrevious)
                 is UIEvents.SelectedSongChange -> {
+                    getSongAmplitudes(musicList.value[uiEvents.index].path)
+                    currentSelectedSong.value = musicList.value[uiEvents.index]
                     songServiceHandler.onPlayerEvents(
                         PlayerEvent.SongChange,
                         selectedSongIndex = uiEvents.index

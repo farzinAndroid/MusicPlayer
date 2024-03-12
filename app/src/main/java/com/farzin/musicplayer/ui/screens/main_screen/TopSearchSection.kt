@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -33,7 +33,7 @@ fun TopSearchSection(
 
         IconButton(onClick = { onMenuClicked() }) {
             Icon(
-                imageVector = Icons.Rounded.Menu,
+                imageVector = Icons.Rounded.FilterList,
                 contentDescription ="",
                 modifier = Modifier.size(16.dp).weight(0.1f)
             )

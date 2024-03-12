@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Repeat
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.Pause
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +46,7 @@ fun FullScreenSongController(
 
         IconButton(onClick = onRepeatClicked) {
             Icon(
-                imageVector = Icons.Filled.Repeat,
+                imageVector = Icons.Rounded.Repeat,
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp),
@@ -58,7 +58,7 @@ fun FullScreenSongController(
             onPreviousClicked()
         }) {
             Icon(
-                imageVector = Icons.Filled.SkipPrevious,
+                imageVector = Icons.Rounded.SkipPrevious,
                 contentDescription = "",
                 modifier = Modifier
                     .size(34.dp),
@@ -82,7 +82,7 @@ fun FullScreenSongController(
             })
 
             Icon(
-                imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                imageVector = if (isPlaying) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
                 contentDescription = "",
                 modifier = Modifier
                     .size(36.dp),
@@ -95,7 +95,7 @@ fun FullScreenSongController(
             onNextClicked()
         }) {
             Icon(
-                imageVector = Icons.Filled.SkipNext,
+                imageVector = Icons.Rounded.SkipNext,
                 contentDescription = "",
                 modifier = Modifier
                     .size(34.dp),
@@ -109,7 +109,7 @@ fun FullScreenSongController(
 
         IconButton(onClick = onRepeatClicked) {
             Icon(
-                imageVector = Icons.Filled.FavoriteBorder,
+                imageVector = Icons.Rounded.FavoriteBorder,
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp),

@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.rounded.Pause
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -108,7 +108,7 @@ fun SongController(
                 onPreviousClicked()
             }) {
                 Icon(
-                    imageVector = Icons.Filled.SkipPrevious,
+                    imageVector = Icons.Rounded.SkipPrevious,
                     contentDescription = "",
                     modifier = Modifier
                         .size(22.dp),
@@ -120,7 +120,7 @@ fun SongController(
                 onPauseClicked()
             }) {
                 Icon(
-                    imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                    imageVector = if (isPlaying) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
                     contentDescription = "",
                     modifier = Modifier
                         .size(22.dp),
@@ -133,7 +133,7 @@ fun SongController(
                 onNextClicked()
             }) {
                 Icon(
-                    imageVector =Icons.Filled.SkipNext,
+                    imageVector =Icons.Rounded.SkipNext,
                     contentDescription = "",
                     modifier = Modifier
                         .size(22.dp),

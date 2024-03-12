@@ -125,4 +125,17 @@ class SongServiceHandler @Inject constructor(
     }
 
 
+    override fun onPositionDiscontinuity(
+        oldPosition: Player.PositionInfo,
+        newPosition: Player.PositionInfo,
+        reason: Int
+    ) {
+        if (reason == Player.DISCONTINUITY_REASON_AUTO_TRANSITION){
+            val newIndex = exoPlayer.currentMediaItemIndex
+            _songState.value = SongState.CurrentPlayingSong(newIndex)
+        }
+        super.onPositionDiscontinuity(oldPosition, newPosition, reason)
+    }
+
+
 }

@@ -16,8 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -149,7 +149,7 @@ fun SongFullDetail(
                     ) {
                         IconButton(onClick = { onCloseClicked() }) {
                             Icon(
-                                imageVector = Icons.Filled.Close,
+                                imageVector = Icons.Rounded.Close,
                                 contentDescription = "",
                                 modifier = Modifier
                                     .size(26.dp)
@@ -158,7 +158,7 @@ fun SongFullDetail(
 
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(
-                                imageVector = Icons.Filled.MoreVert,
+                                imageVector = Icons.Rounded.MoreVert,
                                 contentDescription = "",
                                 modifier = Modifier
                                     .size(26.dp)
