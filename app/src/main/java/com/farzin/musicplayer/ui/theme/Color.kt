@@ -26,3 +26,7 @@ val ColorScheme.mainBackground: Color
 val ColorScheme.darkText: Color
     @Composable
     get() = if (isSystemInDarkTheme()) Color(0xFFE7E7E7) else Color(0xFF000000)
+
+val ColorScheme.likeColor: Color
+    @Composable
+    get() = Color(0xFFDD0000)

@@ -1,5 +1,6 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -39,7 +40,7 @@ fun MainScreen(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
 ) {
 
-    val context = LocalContext.current
+    val activity = LocalContext.current as Activity
 
     val isPlaying by mainScreenViewModel.isPlaying.collectAsState()
     val currentSelectedSong by mainScreenViewModel.currentSelectedSong.collectAsState()
@@ -147,9 +148,14 @@ fun MainScreen(
                 onRepeatClicked = { /*TODO*/ },
                 imagePainter = imagePainter,
                 onCloseClicked = {
-                    scope.launch {
-                        scaffoldState.bottomSheetState.partialExpand()
+                    if (isExpanded){
+                        scope.launch {
+                            scaffoldState.bottomSheetState.partialExpand()
+                        }
+                    } else {
+                        activity.moveTaskToBack(true)
                     }
+
                 },
                 amplitudes = amplitudes
             )

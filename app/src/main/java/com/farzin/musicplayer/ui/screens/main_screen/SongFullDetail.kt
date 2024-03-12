@@ -3,6 +3,7 @@ package com.farzin.musicplayer.ui.screens.main_screen
 import android.graphics.Bitmap
 import android.graphics.Color.parseColor
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,10 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.ui.components.MySpacerHeight
 import com.farzin.musicplayer.ui.theme.mainBackground
@@ -52,9 +53,9 @@ fun SongFullDetail(
     currentSelectedSong: Music,
     isPlaying: Boolean,
     onRepeatClicked: () -> Unit,
-    imagePainter: Painter,
+    imagePainter: AsyncImagePainter,
     onCloseClicked: () -> Unit,
-    amplitudes:List<Int>
+    amplitudes: List<Int>,
 ) {
 
     val context = LocalContext.current
@@ -172,8 +173,12 @@ fun SongFullDetail(
                             .fillMaxWidth(0.8f)
                             .fillMaxHeight(0.65f)
                             .align(Alignment.Center)
-                            .shadow(8.dp, shape = RoundedCornerShape(38.dp))
-                            .clip(RoundedCornerShape(38.dp)),
+                            .clip(RoundedCornerShape(38.dp))
+                            .then(if (imagePainter.state is AsyncImagePainter.State.Success) {
+                                Modifier.shadow(8.dp, shape = RoundedCornerShape(38.dp))
+                            } else {
+                                Modifier
+                            }),
                         contentScale = ContentScale.Crop,
                     )
                 }
@@ -192,7 +197,7 @@ fun SongFullDetail(
         ) {
             SongTitleAndArtist(currentSelectedSong.title, currentSelectedSong.artist)
 
-            MySpacerHeight(height = 10.dp)
+            MySpacerHeight(height = 16.dp)
 
             SongProgressSection(
                 songProgress = songProgress,
@@ -202,8 +207,23 @@ fun SongFullDetail(
                 amplitudes = amplitudes,
                 progressColor = backGroundColor
             )
+
+            MySpacerHeight(height = 20.dp)
+            
+            FullScreenSongController(
+                isPlaying = isPlaying,
+                onNextClicked = onNextClicked,
+                onPreviousClicked = onPreviousClicked,
+                onPauseClicked = onPauseClicked,
+                onRepeatClicked = onRepeatClicked
+            )
         }
 
+    }
+
+
+    BackHandler {
+        onCloseClicked()
     }
 
 }
