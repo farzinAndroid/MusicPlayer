@@ -92,7 +92,8 @@ class ContentResolverHelper @Inject constructor(
                             id
                         )
 
-                        val songAmplituds = songAmplitudeHelper.getSongAmplitudes(path)
+//                        val songAmplituds = songAmplitudeHelper.getSongAmplitudes(path)
+//                        Log.e("TAG",songAmplituds.toString())
 
                         // Stores column values and the contentUri in a local object
                         // that represents the media file.
@@ -105,7 +106,7 @@ class ContentResolverHelper @Inject constructor(
                             duration,
                             title,
                             artUri,
-                            songAmplituds
+//                            songAmplituds
                         )
                     } while (mcursor.moveToNext())
 

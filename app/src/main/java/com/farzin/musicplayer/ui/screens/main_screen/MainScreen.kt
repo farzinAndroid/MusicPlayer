@@ -11,13 +11,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +29,6 @@ import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.utils.SliderHelper.convertBackToRange
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -44,29 +39,14 @@ fun MainScreen(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
 ) {
 
-
-    var isPlaying by remember { mutableStateOf(false) }
-    var currentSelectedSong by remember { mutableStateOf<Music>(Music()) }
-    LaunchedEffect(true) {
-        mainScreenViewModel.isPlaying.collectLatest {
-            isPlaying = it
-        }
-
-    }
-    LaunchedEffect(true) {
-        mainScreenViewModel.currentSelectedSong.collectLatest {
-            currentSelectedSong = it ?: Music(
-                "", "No song", 0L, "", "", 0, "No song"
-            )
-        }
-    }
-
-
     val context = LocalContext.current
 
-    var amplitudes by remember { mutableStateOf<List<Int>>(emptyList()) }
+    val isPlaying by mainScreenViewModel.isPlaying.collectAsState()
+    val currentSelectedSong by mainScreenViewModel.currentSelectedSong.collectAsState()
+    val amplitudes by mainScreenViewModel.amplitudes.collectAsState()
     val songProgress by mainScreenViewModel.songProgress.collectAsState()
     val sliderProgress by mainScreenViewModel.sliderProgress.collectAsState()
+
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -104,7 +84,7 @@ fun MainScreen(
 
 
     val imagePainter = rememberAsyncImagePainter(
-        model = currentSelectedSong.albumArt,
+        model = currentSelectedSong?.albumArt,
         error = if (isSystemInDarkTheme()) painterResource(R.drawable.music_logo_light) else
             painterResource(R.drawable.music_logo_dark),
     )
@@ -134,7 +114,7 @@ fun MainScreen(
                         onPauseClicked = {
                             mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
                         },
-                        currentSelectedSong = currentSelectedSong,
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic(),
                         isPlaying = isPlaying,
                         imagePainter = imagePainter
                     )
@@ -162,7 +142,7 @@ fun MainScreen(
                 onPauseClicked = {
                     mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
                 },
-                currentSelectedSong = currentSelectedSong,
+                currentSelectedSong = currentSelectedSong ?: emptyMusic(),
                 isPlaying = isPlaying,
                 onRepeatClicked = { /*TODO*/ },
                 imagePainter = imagePainter,
@@ -190,7 +170,7 @@ fun MainScreen(
             MainScreenTabLayout(
                 navController = navController,
                 paddingValues = paddingValues,
-                onMusicClicked = {amplitudes = it}
+                onMusicClicked = {}
             )
         },
         sheetShadowElevation = 0.dp,
@@ -201,4 +181,8 @@ fun MainScreen(
     )
 
 }
+
+private fun emptyMusic():Music = Music(
+    "", "No song", 0L, "", "", 0, "No song"
+)
 

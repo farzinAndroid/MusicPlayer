@@ -8,12 +8,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.farzin.musicplayer.data.model.Music
+import com.farzin.musicplayer.data.musics.SongAmplitudeHelper
 import com.farzin.musicplayer.data.player.service.PlayerEvent
 import com.farzin.musicplayer.data.player.service.SongService
 import com.farzin.musicplayer.data.player.service.SongServiceHandler
 import com.farzin.musicplayer.data.player.service.SongState
 import com.farzin.musicplayer.repository.SongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,10 +25,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val songRepository: SongRepository,
-    private val songServiceHandler: SongServiceHandler
+    private val songServiceHandler: SongServiceHandler,
+    private val songAmplitudeHelper: SongAmplitudeHelper
 ) : ViewModel() {
 
     val musicList = MutableStateFlow<List<Music>>(emptyList())
+    val amplitudes = MutableStateFlow<List<Int>>(emptyList())
     val duration = MutableStateFlow(0L)
     val sliderProgress = MutableStateFlow(0f)
     val songProgress = MutableStateFlow(0L)
@@ -58,6 +62,7 @@ class MainScreenViewModel @Inject constructor(
                     }
                     is SongState.CurrentPlayingSong -> {
                         currentSelectedSong.emit(musicList.value[songState.mediaItemIndex])
+                        getSongAmplitudes(musicList.value[songState.mediaItemIndex].path)
                     }
                 }
             }
@@ -126,6 +131,12 @@ class MainScreenViewModel @Inject constructor(
 
         }.also {
             songServiceHandler.setMediaItems(it)
+        }
+    }
+
+    private fun getSongAmplitudes(path:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            amplitudes.emit(songAmplitudeHelper.getSongAmplitudes(path))
         }
     }
 
