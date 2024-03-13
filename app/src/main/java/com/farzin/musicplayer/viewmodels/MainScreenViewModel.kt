@@ -3,6 +3,7 @@ package com.farzin.musicplayer.viewmodels
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
@@ -29,13 +30,17 @@ class MainScreenViewModel @Inject constructor(
     private val songAmplitudeHelper: SongAmplitudeHelper
 ) : ViewModel() {
 
-    val musicList = MutableStateFlow<List<Music>>(emptyList())
+    val musicListDateAddedDesc = MutableStateFlow<List<Music>>(emptyList())
+    val musicListDateAddedAsc = MutableStateFlow<List<Music>>(emptyList())
+    val musicListNameDesc = MutableStateFlow<List<Music>>(emptyList())
+    val musicListNameAsc = MutableStateFlow<List<Music>>(emptyList())
     val amplitudes = MutableStateFlow<List<Int>>(emptyList())
     val duration = MutableStateFlow(0L)
     val sliderProgress = MutableStateFlow(0f)
     val songProgress = MutableStateFlow(0L)
     val isPlaying = MutableStateFlow(false)
     val currentSelectedSong = MutableStateFlow<Music?>(null)
+    val sort = MutableStateFlow(0)
 
 
 
@@ -61,8 +66,25 @@ class MainScreenViewModel @Inject constructor(
                         songProgress.emit(songState.progress)
                     }
                     is SongState.CurrentPlayingSong -> {
-                        currentSelectedSong.emit(musicList.value[songState.mediaItemIndex])
-                        getSongAmplitudes(musicList.value[songState.mediaItemIndex].path)
+                        when(sort.value){
+                            1->{
+                                currentSelectedSong.emit(musicListDateAddedDesc.value[songState.mediaItemIndex])
+                                getSongAmplitudes(musicListDateAddedDesc.value[songState.mediaItemIndex].path)
+                            }
+                            2->{
+                                currentSelectedSong.emit(musicListDateAddedAsc.value[songState.mediaItemIndex])
+                                getSongAmplitudes(musicListDateAddedAsc.value[songState.mediaItemIndex].path)
+                            }
+                            3->{
+                                currentSelectedSong.emit(musicListNameDesc.value[songState.mediaItemIndex])
+                                getSongAmplitudes(musicListNameDesc.value[songState.mediaItemIndex].path)
+                            }
+                            4->{
+                                currentSelectedSong.emit(musicListNameAsc.value[songState.mediaItemIndex])
+                                getSongAmplitudes(musicListNameAsc.value[songState.mediaItemIndex].path)
+                            }
+                        }
+
                     }
                 }
             }
@@ -81,11 +103,22 @@ class MainScreenViewModel @Inject constructor(
 
 
 
-    private fun getAllMusic() {
+    fun getAllMusic() {
         viewModelScope.launch {
-            musicList.emit(songRepository.getAllSongs())
-            setMediaItems()
+            musicListDateAddedDesc.emit(songRepository.getAllMusicDateDesc())
+            musicListDateAddedAsc.emit(songRepository.getAllMusicDateAsc())
+            musicListNameDesc.emit(songRepository.getAllMusicNameDesc())
+            musicListNameAsc.emit(songRepository.getAllMusicNameAsc())
+
+            when(sort.value){
+                1->setMediaItems(musicListDateAddedDesc.value)
+                2->setMediaItems(musicListDateAddedAsc.value)
+                3->setMediaItems(musicListNameDesc.value)
+                4->setMediaItems(musicListNameAsc.value)
+            }
         }
+
+
     }
 
     fun onUIEvent(
@@ -106,8 +139,25 @@ class MainScreenViewModel @Inject constructor(
                 }
                 UIEvents.SeekToPrevious -> songServiceHandler.onPlayerEvents(PlayerEvent.SeekToPrevious)
                 is UIEvents.SelectedSongChange -> {
-                    getSongAmplitudes(musicList.value[uiEvents.index].path)
-                    currentSelectedSong.value = musicList.value[uiEvents.index]
+                    when(sort.value){
+                        1->{
+                            getSongAmplitudes(musicListDateAddedDesc.value[uiEvents.index].path)
+                            currentSelectedSong.value = musicListDateAddedDesc.value[uiEvents.index]
+                        }
+                        2->{
+                            getSongAmplitudes(musicListDateAddedAsc.value[uiEvents.index].path)
+                            currentSelectedSong.value = musicListDateAddedAsc.value[uiEvents.index]
+                        }
+                        3->{
+                            getSongAmplitudes(musicListNameDesc.value[uiEvents.index].path)
+                            currentSelectedSong.value = musicListNameDesc.value[uiEvents.index]
+                        }
+                        4->{
+                            getSongAmplitudes(musicListNameAsc.value[uiEvents.index].path)
+                            currentSelectedSong.value = musicListNameAsc.value[uiEvents.index]
+                        }
+                    }
+
                     songServiceHandler.onPlayerEvents(
                         PlayerEvent.SongChange,
                         selectedSongIndex = uiEvents.index
@@ -121,8 +171,8 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun setMediaItems(){
-        musicList.value.map {
+    private fun setMediaItems(musicList:List<Music>){
+        musicList.map {
             MediaItem.Builder()
                 .setUri(it.uri)
                 .setMediaMetadata(
@@ -136,6 +186,7 @@ class MainScreenViewModel @Inject constructor(
 
         }.also {
             songServiceHandler.setMediaItems(it)
+            Log.e("TAG","media items : ${it}")
         }
     }
 
@@ -155,6 +206,12 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
+
+    fun applySort(songSort:Int){
+        viewModelScope.launch {
+            sort.emit(songSort)
+        }
+    }
 
 
     override fun onCleared() {

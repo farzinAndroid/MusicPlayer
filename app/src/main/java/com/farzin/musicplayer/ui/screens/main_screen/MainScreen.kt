@@ -14,13 +14,17 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -41,6 +45,8 @@ fun MainScreen(
 ) {
 
     val activity = LocalContext.current as Activity
+
+    var showSortDialogue by remember { mutableStateOf(false) }
 
     val isPlaying by mainScreenViewModel.isPlaying.collectAsState()
     val currentSelectedSong by mainScreenViewModel.currentSelectedSong.collectAsState()
@@ -90,6 +96,12 @@ fun MainScreen(
             painterResource(R.drawable.music_logo_dark),
     )
 
+
+    if (showSortDialogue){
+        Dialog(onDismissRequest = { showSortDialogue = false }) {
+            SortDialogContent()
+        }
+    }
     BottomSheetScaffold(
         modifier = Modifier,
         sheetContent = {
@@ -165,7 +177,7 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         topBar = {
             TopSearchSection(
-                onMenuClicked = { /*TODO*/ },
+                onFilterClicked = { showSortDialogue = true },
                 onCardClicked = {
                     navController.navigate(Screens.Search.route)
                 }

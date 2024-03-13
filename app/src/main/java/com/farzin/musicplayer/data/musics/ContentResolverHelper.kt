@@ -15,7 +15,6 @@ import javax.inject.Inject
 
 class ContentResolverHelper @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val songAmplitudeHelper: SongAmplitudeHelper,
 ) : ContentResolverInterface {
 
     private var cursor: Cursor? = null
@@ -32,7 +31,7 @@ class ContentResolverHelper @Inject constructor(
         "${MediaStore.Audio.AudioColumns.IS_MUSIC} = ?"
     private var selectionArg = arrayOf("1")*/
 
-    override suspend fun getAllMusic(): List<Music> {
+    override suspend fun getAllMusicDateDesc(): List<Music> {
         val musicTemp = mutableListOf<Music>()
 
         val projection = arrayOf(
@@ -47,6 +46,8 @@ class ContentResolverHelper @Inject constructor(
 
         // Display music based on DATE_ADDED
         val sortOrder = "${MediaStore.Audio.Media.DATE_ADDED} DESC"
+
+
 
         cursor = contentResolver.query(
             collection,
@@ -113,12 +114,282 @@ class ContentResolverHelper @Inject constructor(
                 }
 
             }
-            cursor?.close()
+
 
         }
 
         return musicTemp
 
+    }
+
+    override suspend fun getAllMusicDateAsc(): List<Music> {
+        val musicTemp = mutableListOf<Music>()
+
+        val projection = arrayOf(
+            MediaStore.Audio.AudioColumns.DISPLAY_NAME,
+            MediaStore.Audio.AudioColumns._ID,
+            MediaStore.Audio.AudioColumns.ARTIST,
+            MediaStore.Audio.AudioColumns.DATA,
+            MediaStore.Audio.AudioColumns.DURATION,
+            MediaStore.Audio.AudioColumns.TITLE,
+            MediaStore.Audio.AudioColumns.ALBUM_ID,
+        )
+
+        // Display music based on DATE_ADDED
+        val sortOrder = "${MediaStore.Audio.Media.DATE_ADDED} ASC"
+
+
+
+        cursor = contentResolver.query(
+            collection,
+            projection,
+            null,
+            null, // No selection arguments
+            sortOrder
+        )
+
+        withContext(Dispatchers.IO) {
+            cursor?.use { mcursor ->
+
+                if (mcursor.moveToFirst()) {
+                    do {
+                        // Cache column indices.
+                        val idColumn = mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+                        val albumIdColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+                        val nameColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+                        val durationColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                        val dataColumn = mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                        val artistColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+                        val titleColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+
+
+                        // Get values of columns for a given video.
+                        val id = mcursor.getLong(idColumn)
+                        val displayName = mcursor.getString(nameColumn)
+                        val duration = mcursor.getInt(durationColumn)
+                        val albumId = mcursor.getLong(albumIdColumn)
+                        val path = mcursor.getString(dataColumn)
+                        val artist = mcursor.getString(artistColumn)
+                        val title = mcursor.getString(titleColumn)
+                        val uri = Uri.parse("content://media/external/audio/albumart")
+                        val artUri = Uri.withAppendedPath(uri, albumId.toString()).toString()
+
+                        val contentUri: Uri = ContentUris.withAppendedId(
+                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            id
+                        )
+
+
+                        // Stores column values and the contentUri in a local object
+                        // that represents the media file.
+                        musicTemp += Music(
+                            contentUri.toString(),
+                            displayName,
+                            id,
+                            artist,
+                            path,
+                            duration,
+                            title,
+                            artUri,
+                        )
+                    } while (mcursor.moveToNext())
+
+                } else {
+                    // Handle the case where no results are found
+                    Log.e("TAG", "No music found")
+                }
+
+            }
+
+
+        }
+
+        return musicTemp
+    }
+
+    override suspend fun getAllMusicNameDesc(): List<Music> {
+        val musicTemp = mutableListOf<Music>()
+
+        val projection = arrayOf(
+            MediaStore.Audio.AudioColumns.DISPLAY_NAME,
+            MediaStore.Audio.AudioColumns._ID,
+            MediaStore.Audio.AudioColumns.ARTIST,
+            MediaStore.Audio.AudioColumns.DATA,
+            MediaStore.Audio.AudioColumns.DURATION,
+            MediaStore.Audio.AudioColumns.TITLE,
+            MediaStore.Audio.AudioColumns.ALBUM_ID,
+        )
+
+        // Display music based on DATE_ADDED
+        val sortOrder = "${MediaStore.Audio.Media.TITLE} DESC"
+
+
+
+        cursor = contentResolver.query(
+            collection,
+            projection,
+            null,
+            null, // No selection arguments
+            sortOrder
+        )
+
+        withContext(Dispatchers.IO) {
+            cursor?.use { mcursor ->
+
+                if (mcursor.moveToFirst()) {
+                    do {
+                        // Cache column indices.
+                        val idColumn = mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+                        val albumIdColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+                        val nameColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+                        val durationColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                        val dataColumn = mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                        val artistColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+                        val titleColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+
+
+                        // Get values of columns for a given video.
+                        val id = mcursor.getLong(idColumn)
+                        val displayName = mcursor.getString(nameColumn)
+                        val duration = mcursor.getInt(durationColumn)
+                        val albumId = mcursor.getLong(albumIdColumn)
+                        val path = mcursor.getString(dataColumn)
+                        val artist = mcursor.getString(artistColumn)
+                        val title = mcursor.getString(titleColumn)
+                        val uri = Uri.parse("content://media/external/audio/albumart")
+                        val artUri = Uri.withAppendedPath(uri, albumId.toString()).toString()
+
+                        val contentUri: Uri = ContentUris.withAppendedId(
+                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            id
+                        )
+
+
+                        // Stores column values and the contentUri in a local object
+                        // that represents the media file.
+                        musicTemp += Music(
+                            contentUri.toString(),
+                            displayName,
+                            id,
+                            artist,
+                            path,
+                            duration,
+                            title,
+                            artUri,
+                        )
+                    } while (mcursor.moveToNext())
+
+                } else {
+                    // Handle the case where no results are found
+                    Log.e("TAG", "No music found")
+                }
+
+            }
+
+
+        }
+
+        return musicTemp
+    }
+
+    override suspend fun getAllMusicNameAsc(): List<Music> {
+        val musicTemp = mutableListOf<Music>()
+
+        val projection = arrayOf(
+            MediaStore.Audio.AudioColumns.DISPLAY_NAME,
+            MediaStore.Audio.AudioColumns._ID,
+            MediaStore.Audio.AudioColumns.ARTIST,
+            MediaStore.Audio.AudioColumns.DATA,
+            MediaStore.Audio.AudioColumns.DURATION,
+            MediaStore.Audio.AudioColumns.TITLE,
+            MediaStore.Audio.AudioColumns.ALBUM_ID,
+        )
+
+        // Display music based on DATE_ADDED
+        val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
+
+
+
+        cursor = contentResolver.query(
+            collection,
+            projection,
+            null,
+            null, // No selection arguments
+            sortOrder
+        )
+
+        withContext(Dispatchers.IO) {
+            cursor?.use { mcursor ->
+
+                if (mcursor.moveToFirst()) {
+                    do {
+                        // Cache column indices.
+                        val idColumn = mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+                        val albumIdColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+                        val nameColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+                        val durationColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                        val dataColumn = mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                        val artistColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+                        val titleColumn =
+                            mcursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+
+
+                        // Get values of columns for a given video.
+                        val id = mcursor.getLong(idColumn)
+                        val displayName = mcursor.getString(nameColumn)
+                        val duration = mcursor.getInt(durationColumn)
+                        val albumId = mcursor.getLong(albumIdColumn)
+                        val path = mcursor.getString(dataColumn)
+                        val artist = mcursor.getString(artistColumn)
+                        val title = mcursor.getString(titleColumn)
+                        val uri = Uri.parse("content://media/external/audio/albumart")
+                        val artUri = Uri.withAppendedPath(uri, albumId.toString()).toString()
+
+                        val contentUri: Uri = ContentUris.withAppendedId(
+                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            id
+                        )
+
+
+                        // Stores column values and the contentUri in a local object
+                        // that represents the media file.
+                        musicTemp += Music(
+                            contentUri.toString(),
+                            displayName,
+                            id,
+                            artist,
+                            path,
+                            duration,
+                            title,
+                            artUri,
+                        )
+                    } while (mcursor.moveToNext())
+
+                } else {
+                    // Handle the case where no results are found
+                    Log.e("TAG", "No music found")
+                }
+
+            }
+
+
+        }
+
+        return musicTemp
     }
 
 }

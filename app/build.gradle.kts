@@ -118,4 +118,7 @@ dependencies {
     // amplitude
     implementation ("com.github.lincollincol:amplituda:2.2.2")
 
+    //datastore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
 }

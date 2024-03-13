@@ -19,7 +19,7 @@ import com.farzin.musicplayer.ui.components.SearchBarSection
 
 @Composable
 fun TopSearchSection(
-    onMenuClicked:()->Unit,
+    onFilterClicked:()->Unit,
     onCardClicked:()->Unit
 ) {
 
@@ -31,7 +31,7 @@ fun TopSearchSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        IconButton(onClick = { onMenuClicked() }) {
+        IconButton(onClick = { onFilterClicked() }) {
             Icon(
                 imageVector = Icons.Rounded.FilterList,
                 contentDescription ="",

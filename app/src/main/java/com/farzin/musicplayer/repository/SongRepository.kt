@@ -7,7 +7,10 @@ class SongRepository @Inject constructor(
     private val contentResolverHelper: ContentResolverHelper
 ) {
 
-    suspend fun getAllSongs() = contentResolverHelper.getAllMusic()
+    suspend fun getAllMusicDateDesc() = contentResolverHelper.getAllMusicDateDesc()
+    suspend fun getAllMusicDateAsc() = contentResolverHelper.getAllMusicDateAsc()
+    suspend fun getAllMusicNameDesc() = contentResolverHelper.getAllMusicNameDesc()
+    suspend fun getAllMusicNameAsc() = contentResolverHelper.getAllMusicNameAsc()
 
 
 }
