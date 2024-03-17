@@ -171,7 +171,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun setMediaItems(musicList:List<Music>){
+    fun setMediaItems(musicList:List<Music>){
         musicList.map {
             MediaItem.Builder()
                 .setUri(it.uri)

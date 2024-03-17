@@ -1,6 +1,5 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,7 +41,6 @@ fun AllSongs(
     val musicListDateAddedAsc by mainScreenViewModel.musicListDateAddedAsc.collectAsState()
     val musicListNameDesc by mainScreenViewModel.musicListNameDesc.collectAsState()
     val musicListNameAsc by mainScreenViewModel.musicListNameAsc.collectAsState()
-    val sortv by mainScreenViewModel.sort.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var isServiceRunning by remember { mutableStateOf(false) }
@@ -51,7 +49,12 @@ fun AllSongs(
     LaunchedEffect(dataStoreViewModel.getSort()){
         sort = dataStoreViewModel.getSort()
         mainScreenViewModel.applySort(sort)
-        Log.e("TAG",sortv.toString())
+        when(sort){
+            1->mainScreenViewModel.setMediaItems(musicListDateAddedDesc)
+            2->mainScreenViewModel.setMediaItems(musicListDateAddedAsc)
+            3->mainScreenViewModel.setMediaItems(musicListNameDesc)
+            4->mainScreenViewModel.setMediaItems(musicListNameAsc)
+        }
     }
 
 
