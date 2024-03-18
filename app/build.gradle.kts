@@ -89,7 +89,7 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:2.2.2")
 
     // This dependency contains all the material icons
-    implementation("androidx.compose.material:material-icons-extended:1.6.2")
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
 
     //system ui controller
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.28.0")

@@ -1,11 +1,6 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -15,10 +10,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.farzin.musicplayer.ui.components.Loading
 import com.farzin.musicplayer.viewmodels.DataStoreViewModel
 import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
@@ -61,90 +56,70 @@ fun AllSongs(
     val uiState by mainScreenViewModel.uiState.collectAsState()
     when (uiState) {
         UIState.Initial -> {
-            Text(text = "Loading")
+            Loading()
         }
 
         UIState.Ready -> {
             when(sort){
                 1->{
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
-                        itemsIndexed(musicListDateAddedDesc) { index, music ->
-                            SongItem(music = music, onMusicClicked = {
-                                scope.launch {
-                                    mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
-                                    if (!isServiceRunning) {
-                                        mainScreenViewModel.startService(context)
-                                        isServiceRunning = true
-                                    }
+                    InitLazyColumn(
+                        songList = musicListDateAddedDesc,
+                        paddingValues = paddingValues,
+                        onClick = {index->
+                            scope.launch {
+                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                if (!isServiceRunning) {
+                                    mainScreenViewModel.startService(context)
+                                    isServiceRunning = true
                                 }
-                            })
+                            }
                         }
-
-                    }
+                    )
                 }
                 2->{
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
-                        itemsIndexed(musicListDateAddedAsc) { index, music ->
-                            SongItem(music = music, onMusicClicked = {
-                                scope.launch {
-                                    mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
-                                    if (!isServiceRunning) {
-                                        mainScreenViewModel.startService(context)
-                                        isServiceRunning = true
-                                    }
+                    InitLazyColumn(
+                        songList = musicListDateAddedAsc,
+                        paddingValues = paddingValues,
+                        onClick = {index->
+                            scope.launch {
+                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                if (!isServiceRunning) {
+                                    mainScreenViewModel.startService(context)
+                                    isServiceRunning = true
                                 }
-                            })
+                            }
                         }
-
-                    }
+                    )
                 }
                 3->{
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
-                        itemsIndexed(musicListNameDesc) { index, music ->
-                            SongItem(music = music, onMusicClicked = {
-                                scope.launch {
-                                    mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
-                                    if (!isServiceRunning) {
-                                        mainScreenViewModel.startService(context)
-                                        isServiceRunning = true
-                                    }
+                    InitLazyColumn(
+                        songList = musicListNameDesc,
+                        paddingValues = paddingValues,
+                        onClick = {index->
+                            scope.launch {
+                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                if (!isServiceRunning) {
+                                    mainScreenViewModel.startService(context)
+                                    isServiceRunning = true
                                 }
-                            })
+                            }
                         }
-
-                    }
+                    )
                 }
                 4->{
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
-                        itemsIndexed(musicListNameAsc) { index, music ->
-                            SongItem(music = music, onMusicClicked = {
-                                scope.launch {
-                                    mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
-                                    if (!isServiceRunning) {
-                                        mainScreenViewModel.startService(context)
-                                        isServiceRunning = true
-                                    }
+                    InitLazyColumn(
+                        songList = musicListNameAsc,
+                        paddingValues = paddingValues,
+                        onClick = {index->
+                            scope.launch {
+                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                if (!isServiceRunning) {
+                                    mainScreenViewModel.startService(context)
+                                    isServiceRunning = true
                                 }
-                            })
+                            }
                         }
-
-                    }
+                    )
                 }
             }
 
