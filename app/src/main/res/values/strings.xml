@@ -4,4 +4,9 @@
     <string name="songs">Songs</string>
     <string name="albums">Albums</string>
     <string name="artists">Artists</string>
+    <string name="sortby">Sort by</string>
+    <string name="name_desc">Name desc</string>
+    <string name="name_asc">Name asc</string>
+    <string name="date_added_desc">Date added desc</string>
+    <string name="date_added_asc">Date added asc</string>
 </resources>

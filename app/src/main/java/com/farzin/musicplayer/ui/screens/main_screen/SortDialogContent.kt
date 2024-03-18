@@ -23,66 +23,78 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.farzin.musicplayer.R
+import com.farzin.musicplayer.data.model.SortModel
 import com.farzin.musicplayer.ui.components.MySpacerHeight
 import com.farzin.musicplayer.ui.components.MySpacerWidth
 import com.farzin.musicplayer.ui.theme.darkText
 import com.farzin.musicplayer.ui.theme.mainBackground
 import com.farzin.musicplayer.viewmodels.DataStoreViewModel
-import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 
 @Composable
 fun SortDialogContent(
     dataStoreViewModel: DataStoreViewModel = hiltViewModel(),
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
 ) {
 
 
     val options = listOf(
-        1,
-        2,
-        3,
-        4,
+        SortModel(
+            title = stringResource(R.string.date_added_desc),
+            sort = 1
+        ),
+        SortModel(
+            title = stringResource(R.string.date_added_asc),
+            sort = 2
+        ),
+        SortModel(
+            title = stringResource(R.string.name_desc),
+            sort = 3
+        ),
+        SortModel(
+            title = stringResource(R.string.name_asc),
+            sort = 4
+        ),
     )
 
 
     var selectedOptions by when (dataStoreViewModel.getSort()) {
         1 -> {
-            remember { mutableIntStateOf(options[0]) }
+            remember { mutableIntStateOf(options[0].sort) }
         }
 
         2 -> {
-            remember { mutableIntStateOf(options[1]) }
+            remember { mutableIntStateOf(options[1].sort) }
         }
 
         3 -> {
-            remember { mutableIntStateOf(options[2]) }
+            remember { mutableIntStateOf(options[2].sort) }
         }
 
         4 -> {
-            remember { mutableIntStateOf(options[3]) }
+            remember { mutableIntStateOf(options[3].sort) }
         }
 
         else -> {
-            remember { mutableIntStateOf(options[0]) }
+            remember { mutableIntStateOf(options[0].sort) }
         }
     }
 
 
     Column(
         modifier = Modifier
-            .fillMaxWidth(0.5f)
-            .fillMaxHeight(0.25f)
+            .fillMaxWidth(0.6f)
+            .fillMaxHeight(0.30f)
             .clip(Shapes().large)
             .background(MaterialTheme.colorScheme.mainBackground),
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center
     ) {
 
 
         MySpacerHeight(height = 10.dp)
 
         Text(
-            text = stringResource(R.string.songs),
-            style = MaterialTheme.typography.titleLarge,
+            text = stringResource(R.string.sortby),
+            style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.darkText,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -90,7 +102,7 @@ fun SortDialogContent(
 
         MySpacerHeight(height = 6.dp)
 
-        options.forEachIndexed { index, title ->
+        options.forEachIndexed { index, sortModel ->
 
             Row(
                 modifier = Modifier
@@ -101,20 +113,19 @@ fun SortDialogContent(
 
 
                 RadioButton(
-                    selected = (options[index] == selectedOptions),
+                    selected = (options[index].sort == selectedOptions),
                     onClick = {
-                        selectedOptions = title
-                        dataStoreViewModel.saveSort(title)
+                        selectedOptions = sortModel.sort
+                        dataStoreViewModel.saveSort(sortModel.sort)
                     },
                 )
 
                 MySpacerWidth(width = 8.dp)
 
                 Text(
-                    text = title.toString(),
-                    style = MaterialTheme.typography.titleLarge,
+                    text = sortModel.title,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.darkText,
-                    fontWeight = FontWeight.Bold
                 )
             }
         }
