@@ -32,7 +32,7 @@ import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.utils.SliderHelper.convertBackToRange
-import com.farzin.musicplayer.viewmodels.MainScreenViewModel
+import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
 import kotlinx.coroutines.launch
 
@@ -41,18 +41,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     navController: NavController,
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
+    allSongsViewModel: AllSongsViewModel = hiltViewModel(),
 ) {
 
     val activity = LocalContext.current as Activity
 
     var showSortDialogue by remember { mutableStateOf(false) }
 
-    val isPlaying by mainScreenViewModel.isPlaying.collectAsState()
-    val currentSelectedSong by mainScreenViewModel.currentSelectedSong.collectAsState()
-    val amplitudes by mainScreenViewModel.amplitudes.collectAsState()
-    val songProgress by mainScreenViewModel.songProgress.collectAsState()
-    val sliderProgress by mainScreenViewModel.sliderProgress.collectAsState()
+    val isPlaying by allSongsViewModel.isPlaying.collectAsState()
+    val currentSelectedSong by allSongsViewModel.currentSelectedSong.collectAsState()
+    val amplitudes by allSongsViewModel.amplitudes.collectAsState()
+    val songProgress by allSongsViewModel.songProgress.collectAsState()
+    val sliderProgress by allSongsViewModel.sliderProgress.collectAsState()
 
 
     val scope = rememberCoroutineScope()
@@ -117,15 +117,15 @@ fun MainScreen(
                 ) {
                     SongController(
                         onNextClicked = {
-                            mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
-                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                            allSongsViewModel.onUIEvent(UIEvents.SeekToNext)
+                            allSongsViewModel.onUIEvent(UIEvents.PlayPause)
                         },
                         onPreviousClicked = {
-                            mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
-                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                            allSongsViewModel.onUIEvent(UIEvents.SeekToPrevious)
+                            allSongsViewModel.onUIEvent(UIEvents.PlayPause)
                         },
                         onPauseClicked = {
-                            mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                            allSongsViewModel.onUIEvent(UIEvents.PlayPause)
                         },
                         currentSelectedSong = currentSelectedSong ?: emptyMusic(),
                         isPlaying = isPlaying,
@@ -142,18 +142,18 @@ fun MainScreen(
                 songProgress = songProgress,
                 sliderProgress = sliderProgress,
                 onProgressBarClicked = {
-                    mainScreenViewModel.onUIEvent(UIEvents.SeekTo(convertBackToRange(it)))
+                    allSongsViewModel.onUIEvent(UIEvents.SeekTo(convertBackToRange(it)))
                 },
                 onNextClicked = {
-                    mainScreenViewModel.onUIEvent(UIEvents.SeekToNext)
-                    mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                    allSongsViewModel.onUIEvent(UIEvents.SeekToNext)
+                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
                 },
                 onPreviousClicked = {
-                    mainScreenViewModel.onUIEvent(UIEvents.SeekToPrevious)
-                    mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                    allSongsViewModel.onUIEvent(UIEvents.SeekToPrevious)
+                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
                 },
                 onPauseClicked = {
-                    mainScreenViewModel.onUIEvent(UIEvents.PlayPause)
+                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
                 },
                 currentSelectedSong = currentSelectedSong ?: emptyMusic(),
                 isPlaying = isPlaying,

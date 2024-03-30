@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.TabItem
+import com.farzin.musicplayer.ui.screens.main_screen.albums.AllAlbums
 import com.farzin.musicplayer.ui.theme.darkText
 
 @Composable
@@ -78,7 +79,10 @@ fun MainScreenTabLayout(
                 )
             }
             1->{
-                Text(text = "album")
+                AllAlbums(
+                    navController = navController,
+                    paddingValues = paddingValues,
+                    onMusicClicked = { /*TODO*/ })
             }
             2->{
                 Text(text = "artist")

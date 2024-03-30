@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(
+class AllSongsViewModel @Inject constructor(
     private val songRepository: SongRepository,
     private val songServiceHandler: SongServiceHandler,
     private val songAmplitudeHelper: SongAmplitudeHelper

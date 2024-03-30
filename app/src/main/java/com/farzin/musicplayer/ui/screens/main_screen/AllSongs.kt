@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.farzin.musicplayer.ui.components.Loading
+import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 import com.farzin.musicplayer.viewmodels.DataStoreViewModel
-import com.farzin.musicplayer.viewmodels.MainScreenViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
 import com.farzin.musicplayer.viewmodels.UIState
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AllSongs(
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
+    allSongsViewModel: AllSongsViewModel = hiltViewModel(),
     navController: NavController,
     paddingValues: PaddingValues,
     onMusicClicked: () -> Unit,
@@ -32,10 +32,10 @@ fun AllSongs(
 
 
 
-    val musicListDateAddedDesc by mainScreenViewModel.musicListDateAddedDesc.collectAsState()
-    val musicListDateAddedAsc by mainScreenViewModel.musicListDateAddedAsc.collectAsState()
-    val musicListNameDesc by mainScreenViewModel.musicListNameDesc.collectAsState()
-    val musicListNameAsc by mainScreenViewModel.musicListNameAsc.collectAsState()
+    val musicListDateAddedDesc by allSongsViewModel.musicListDateAddedDesc.collectAsState()
+    val musicListDateAddedAsc by allSongsViewModel.musicListDateAddedAsc.collectAsState()
+    val musicListNameDesc by allSongsViewModel.musicListNameDesc.collectAsState()
+    val musicListNameAsc by allSongsViewModel.musicListNameAsc.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var isServiceRunning by remember { mutableStateOf(false) }
@@ -43,17 +43,17 @@ fun AllSongs(
     var sort by remember { mutableIntStateOf(0) }
     LaunchedEffect(dataStoreViewModel.getSort()){
         sort = dataStoreViewModel.getSort()
-        mainScreenViewModel.applySort(sort)
-        when(sort){
-            1->mainScreenViewModel.setMediaItems(musicListDateAddedDesc)
-            2->mainScreenViewModel.setMediaItems(musicListDateAddedAsc)
-            3->mainScreenViewModel.setMediaItems(musicListNameDesc)
-            4->mainScreenViewModel.setMediaItems(musicListNameAsc)
-        }
+        allSongsViewModel.applySort(sort)
+        /*when(sort){
+            1->allSongsViewModel.setMediaItems(musicListDateAddedDesc)
+            2->allSongsViewModel.setMediaItems(musicListDateAddedAsc)
+            3->allSongsViewModel.setMediaItems(musicListNameDesc)
+            4->allSongsViewModel.setMediaItems(musicListNameAsc)
+        }*/
     }
 
 
-    val uiState by mainScreenViewModel.uiState.collectAsState()
+    val uiState by allSongsViewModel.uiState.collectAsState()
     when (uiState) {
         UIState.Initial -> {
             Loading()
@@ -67,11 +67,13 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.setMediaItems(musicListDateAddedDesc)
+                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
                                 if (!isServiceRunning) {
-                                    mainScreenViewModel.startService(context)
+                                    allSongsViewModel.startService(context)
                                     isServiceRunning = true
                                 }
+
                             }
                         }
                     )
@@ -82,11 +84,13 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.setMediaItems(musicListDateAddedAsc)
+                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
                                 if (!isServiceRunning) {
-                                    mainScreenViewModel.startService(context)
+                                    allSongsViewModel.startService(context)
                                     isServiceRunning = true
                                 }
+
                             }
                         }
                     )
@@ -97,11 +101,13 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.setMediaItems(musicListNameDesc)
+                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
                                 if (!isServiceRunning) {
-                                    mainScreenViewModel.startService(context)
+                                    allSongsViewModel.startService(context)
                                     isServiceRunning = true
                                 }
+
                             }
                         }
                     )
@@ -112,11 +118,13 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                mainScreenViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.setMediaItems(musicListNameAsc)
+                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
                                 if (!isServiceRunning) {
-                                    mainScreenViewModel.startService(context)
+                                    allSongsViewModel.startService(context)
                                     isServiceRunning = true
                                 }
+
                             }
                         }
                     )
