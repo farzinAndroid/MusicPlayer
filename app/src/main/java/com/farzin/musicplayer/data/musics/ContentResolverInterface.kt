@@ -12,6 +12,6 @@ interface ContentResolverInterface {
     // getting all songs
 
     // getting all albums
-    suspend fun getAllAlbumsDateDesc():List<MusicAlbum>
+    suspend fun getAllAlbums():List<MusicAlbum>
     suspend fun getAllSongsBasedOnAlbum(id:Long):List<Music>
 }

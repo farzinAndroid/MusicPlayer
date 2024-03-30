@@ -3,12 +3,15 @@ package com.farzin.musicplayer.viewmodels
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.farzin.musicplayer.data.model.Music
+import com.farzin.musicplayer.data.model.MusicAlbum
 import com.farzin.musicplayer.data.musics.SongAmplitudeHelper
 import com.farzin.musicplayer.data.player.service.PlayerEvent
 import com.farzin.musicplayer.data.player.service.SongService
@@ -30,6 +33,13 @@ class AllSongsViewModel @Inject constructor(
     private val songAmplitudeHelper: SongAmplitudeHelper
 ) : ViewModel() {
 
+    val allAlbums = MutableStateFlow<List<MusicAlbum>>(emptyList())
+    val allSongsBasedOnAlbum = MutableStateFlow<List<Music>>(emptyList())
+
+    var isServiceRunning by  mutableStateOf(false)
+    var isSongPlayingFromAlbum = MutableStateFlow(false)
+
+
     val musicListDateAddedDesc = MutableStateFlow<List<Music>>(emptyList())
     val musicListDateAddedAsc = MutableStateFlow<List<Music>>(emptyList())
     val musicListNameDesc = MutableStateFlow<List<Music>>(emptyList())
@@ -39,7 +49,7 @@ class AllSongsViewModel @Inject constructor(
     val sliderProgress = MutableStateFlow(0f)
     val songProgress = MutableStateFlow(0L)
     val isPlaying = MutableStateFlow(false)
-    val currentSelectedSong = MutableStateFlow<Music?>(null)
+    var currentSelectedSong = MutableStateFlow<Music?>(null)
     val sort = MutableStateFlow(0)
 
 
@@ -49,6 +59,7 @@ class AllSongsViewModel @Inject constructor(
 
     init {
         getAllMusic()
+        getAllAlbums()
     }
     init {
         viewModelScope.launch {
@@ -66,24 +77,30 @@ class AllSongsViewModel @Inject constructor(
                         songProgress.emit(songState.progress)
                     }
                     is SongState.CurrentPlayingSong -> {
-                        when(sort.value){
-                            1->{
-                                currentSelectedSong.emit(musicListDateAddedDesc.value[songState.mediaItemIndex])
-                                getSongAmplitudes(musicListDateAddedDesc.value[songState.mediaItemIndex].path)
-                            }
-                            2->{
-                                currentSelectedSong.emit(musicListDateAddedAsc.value[songState.mediaItemIndex])
-                                getSongAmplitudes(musicListDateAddedAsc.value[songState.mediaItemIndex].path)
-                            }
-                            3->{
-                                currentSelectedSong.emit(musicListNameDesc.value[songState.mediaItemIndex])
-                                getSongAmplitudes(musicListNameDesc.value[songState.mediaItemIndex].path)
-                            }
-                            4->{
-                                currentSelectedSong.emit(musicListNameAsc.value[songState.mediaItemIndex])
-                                getSongAmplitudes(musicListNameAsc.value[songState.mediaItemIndex].path)
+                        if (isSongPlayingFromAlbum.value){
+                            currentSelectedSong.emit(allSongsBasedOnAlbum.value[songState.mediaItemIndex])
+                            getSongAmplitudes(allSongsBasedOnAlbum.value[songState.mediaItemIndex].path)
+                        }else{
+                            when(sort.value){
+                                1->{
+                                    currentSelectedSong.emit(musicListDateAddedDesc.value[songState.mediaItemIndex])
+                                    getSongAmplitudes(musicListDateAddedDesc.value[songState.mediaItemIndex].path)
+                                }
+                                2->{
+                                    currentSelectedSong.emit(musicListDateAddedAsc.value[songState.mediaItemIndex])
+                                    getSongAmplitudes(musicListDateAddedAsc.value[songState.mediaItemIndex].path)
+                                }
+                                3->{
+                                    currentSelectedSong.emit(musicListNameDesc.value[songState.mediaItemIndex])
+                                    getSongAmplitudes(musicListNameDesc.value[songState.mediaItemIndex].path)
+                                }
+                                4->{
+                                    currentSelectedSong.emit(musicListNameAsc.value[songState.mediaItemIndex])
+                                    getSongAmplitudes(musicListNameAsc.value[songState.mediaItemIndex].path)
+                                }
                             }
                         }
+
 
                     }
                 }
@@ -120,6 +137,17 @@ class AllSongsViewModel @Inject constructor(
 
 
     }
+    private fun getAllAlbums(){
+        viewModelScope.launch {
+            allAlbums.emit(songRepository.getAllAlbums())
+        }
+    }
+
+    fun getSongsBasedOnAlbum(albumId:Long){
+        viewModelScope.launch {
+            allSongsBasedOnAlbum.emit(songRepository.getAllSongsBasedOnAlbum(albumId))
+        }
+    }
 
     fun onUIEvent(
         uiEvents: UIEvents
@@ -139,24 +167,30 @@ class AllSongsViewModel @Inject constructor(
                 }
                 UIEvents.SeekToPrevious -> songServiceHandler.onPlayerEvents(PlayerEvent.SeekToPrevious)
                 is UIEvents.SelectedSongChange -> {
-                    when(sort.value){
-                        1->{
-                            getSongAmplitudes(musicListDateAddedDesc.value[uiEvents.index].path)
-                            currentSelectedSong.value = musicListDateAddedDesc.value[uiEvents.index]
-                        }
-                        2->{
-                            getSongAmplitudes(musicListDateAddedAsc.value[uiEvents.index].path)
-                            currentSelectedSong.value = musicListDateAddedAsc.value[uiEvents.index]
-                        }
-                        3->{
-                            getSongAmplitudes(musicListNameDesc.value[uiEvents.index].path)
-                            currentSelectedSong.value = musicListNameDesc.value[uiEvents.index]
-                        }
-                        4->{
-                            getSongAmplitudes(musicListNameAsc.value[uiEvents.index].path)
-                            currentSelectedSong.value = musicListNameAsc.value[uiEvents.index]
+                    if (isSongPlayingFromAlbum.value){
+                        getSongAmplitudes(allSongsBasedOnAlbum.value[uiEvents.index].path)
+                        currentSelectedSong.value = allSongsBasedOnAlbum.value[uiEvents.index]
+                    }else{
+                        when(sort.value){
+                            1->{
+                                getSongAmplitudes(musicListDateAddedDesc.value[uiEvents.index].path)
+                                currentSelectedSong.value = musicListDateAddedDesc.value[uiEvents.index]
+                            }
+                            2->{
+                                getSongAmplitudes(musicListDateAddedAsc.value[uiEvents.index].path)
+                                currentSelectedSong.value = musicListDateAddedAsc.value[uiEvents.index]
+                            }
+                            3->{
+                                getSongAmplitudes(musicListNameDesc.value[uiEvents.index].path)
+                                currentSelectedSong.value = musicListNameDesc.value[uiEvents.index]
+                            }
+                            4->{
+                                getSongAmplitudes(musicListNameAsc.value[uiEvents.index].path)
+                                currentSelectedSong.value = musicListNameAsc.value[uiEvents.index]
+                            }
                         }
                     }
+
 
                     songServiceHandler.onPlayerEvents(
                         PlayerEvent.SongChange,
@@ -186,7 +220,6 @@ class AllSongsViewModel @Inject constructor(
 
         }.also {
             songServiceHandler.setMediaItems(it)
-            Log.e("TAG","media items : ${it}")
         }
     }
 

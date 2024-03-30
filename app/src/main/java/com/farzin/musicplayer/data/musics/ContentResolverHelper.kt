@@ -401,7 +401,7 @@ class ContentResolverHelper @Inject constructor(
 
     // getting all albums
 
-    override suspend fun getAllAlbumsDateDesc(): List<MusicAlbum> {
+    override suspend fun getAllAlbums(): List<MusicAlbum> {
         val albumSet = linkedSetOf<MusicAlbum>()
 
         val projection = arrayOf(
@@ -439,6 +439,7 @@ class ContentResolverHelper @Inject constructor(
                         albumName = name,
                         albumId = id,
                         albumArt = artUri,
+                        artistName = artist,
                         numberOfSongs = -1 // As we don't have the actual number, set to -1 or query it separately
                     )
 
@@ -550,5 +551,7 @@ class ContentResolverHelper @Inject constructor(
 
         return musicTemp
     }
+
+    // getting all albums
 
 }

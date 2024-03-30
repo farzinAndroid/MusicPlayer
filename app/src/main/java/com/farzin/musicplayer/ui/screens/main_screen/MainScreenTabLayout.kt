@@ -40,10 +40,10 @@ fun MainScreenTabLayout(
             text = stringResource(R.string.albums),
             textColor = MaterialTheme.colorScheme.darkText
         ),
-        TabItem(
+        /*TabItem(
             text = stringResource(R.string.artists),
             textColor = MaterialTheme.colorScheme.darkText
-        )
+        )*/
     )
 
     Column {
@@ -81,11 +81,7 @@ fun MainScreenTabLayout(
             1->{
                 AllAlbums(
                     navController = navController,
-                    paddingValues = paddingValues,
-                    onMusicClicked = { /*TODO*/ })
-            }
-            2->{
-                Text(text = "artist")
+                    paddingValues = paddingValues)
             }
         }
     }

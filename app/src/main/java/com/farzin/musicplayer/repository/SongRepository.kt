@@ -11,6 +11,8 @@ class SongRepository @Inject constructor(
     suspend fun getAllMusicDateAsc() = contentResolverHelper.getAllMusicDateAsc()
     suspend fun getAllMusicNameDesc() = contentResolverHelper.getAllMusicNameDesc()
     suspend fun getAllMusicNameAsc() = contentResolverHelper.getAllMusicNameAsc()
+    suspend fun getAllAlbums() = contentResolverHelper.getAllAlbums()
+    suspend fun getAllSongsBasedOnAlbum(id:Long) = contentResolverHelper.getAllSongsBasedOnAlbum(id)
 
 
 }

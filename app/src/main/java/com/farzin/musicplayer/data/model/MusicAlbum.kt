@@ -5,4 +5,5 @@ data class MusicAlbum(
     val albumName:String,
     val numberOfSongs:Int,
     val albumArt:String,
+    val artistName:String
 )
