@@ -1,6 +1,5 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +36,7 @@ fun AllSongs(
     val musicListDateAddedAsc by allSongsViewModel.musicListDateAddedAsc.collectAsState()
     val musicListNameDesc by allSongsViewModel.musicListNameDesc.collectAsState()
     val musicListNameAsc by allSongsViewModel.musicListNameAsc.collectAsState()
+    val currentSelectedSong by allSongsViewModel.currentSelectedSong.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -45,12 +45,6 @@ fun AllSongs(
     LaunchedEffect(dataStoreViewModel.getSort()){
         sort = dataStoreViewModel.getSort()
         allSongsViewModel.applySort(sort)
-        /*when(sort){
-            1->allSongsViewModel.setMediaItems(musicListDateAddedDesc)
-            2->allSongsViewModel.setMediaItems(musicListDateAddedAsc)
-            3->allSongsViewModel.setMediaItems(musicListNameDesc)
-            4->allSongsViewModel.setMediaItems(musicListNameAsc)
-        }*/
     }
 
 
@@ -68,13 +62,17 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                allSongsViewModel.setMediaItems(musicListDateAddedDesc)
-                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.isSongPlayingFromAlbum(false)
+                                if (currentSelectedSong == musicListDateAddedDesc[index]){
+                                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
+                                }else{
+                                    allSongsViewModel.setMediaItems(musicListDateAddedDesc)
+                                    allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                }
                                 if (!allSongsViewModel.isServiceRunning) {
                                     allSongsViewModel.startService(context)
                                     allSongsViewModel.isServiceRunning = true
                                 }
-
                             }
                         }
                     )
@@ -85,13 +83,17 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                allSongsViewModel.setMediaItems(musicListDateAddedAsc)
-                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.isSongPlayingFromAlbum(false)
+                                if (currentSelectedSong == musicListDateAddedAsc[index]){
+                                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
+                                }else{
+                                    allSongsViewModel.setMediaItems(musicListDateAddedAsc)
+                                    allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                }
                                 if (!allSongsViewModel.isServiceRunning) {
                                     allSongsViewModel.startService(context)
                                     allSongsViewModel.isServiceRunning = true
                                 }
-
                             }
                         }
                     )
@@ -102,13 +104,17 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             scope.launch {
-                                allSongsViewModel.setMediaItems(musicListNameDesc)
-                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                allSongsViewModel.isSongPlayingFromAlbum(false)
+                                if (currentSelectedSong == musicListNameDesc[index]){
+                                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
+                                }else{
+                                    allSongsViewModel.setMediaItems(musicListNameDesc)
+                                    allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                }
                                 if (!allSongsViewModel.isServiceRunning) {
                                     allSongsViewModel.startService(context)
                                     allSongsViewModel.isServiceRunning = true
                                 }
-
                             }
                         }
                     )
@@ -119,15 +125,18 @@ fun AllSongs(
                         paddingValues = paddingValues,
                         onClick = {index->
                             allSongsViewModel.viewModelScope.launch {
-                                allSongsViewModel.setMediaItems(musicListNameAsc)
-                                allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
-                                allSongsViewModel.isSongPlayingFromAlbum.emit(false)
+                                allSongsViewModel.isSongPlayingFromAlbum(false)
+                                if (currentSelectedSong == musicListNameAsc[index]){
+                                    allSongsViewModel.onUIEvent(UIEvents.PlayPause)
+                                }else{
+                                    allSongsViewModel.setMediaItems(musicListNameAsc)
+                                    allSongsViewModel.onUIEvent(UIEvents.SelectedSongChange(index))
+                                }
                                 if (!allSongsViewModel.isServiceRunning) {
                                     allSongsViewModel.startService(context)
                                     allSongsViewModel.isServiceRunning = true
                                 }
                             }
-                            Log.e("TAG","is album song = ${allSongsViewModel.isSongPlayingFromAlbum.value}")
                         }
                     )
                 }

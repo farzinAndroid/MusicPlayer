@@ -247,6 +247,13 @@ class AllSongsViewModel @Inject constructor(
     }
 
 
+    fun isSongPlayingFromAlbum(isFromAlbum:Boolean){
+        viewModelScope.launch {
+            isSongPlayingFromAlbum.emit(isFromAlbum)
+        }
+    }
+
+
     override fun onCleared() {
         viewModelScope.launch {
             songServiceHandler.onPlayerEvents(PlayerEvent.Stop)

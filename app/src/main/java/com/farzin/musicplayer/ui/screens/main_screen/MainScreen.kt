@@ -2,7 +2,6 @@ package com.farzin.musicplayer.ui.screens.main_screen
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -56,8 +55,6 @@ fun MainScreen(
     val amplitudes by allSongsViewModel.amplitudes.collectAsState()
     val songProgress by allSongsViewModel.songProgress.collectAsState()
     val sliderProgress by allSongsViewModel.sliderProgress.collectAsState()
-    val isSongPlayingFromAlbum by allSongsViewModel.isSongPlayingFromAlbum.collectAsState()
-    Log.e("TAG","is album song = $isSongPlayingFromAlbum")
 
 
     val scope = rememberCoroutineScope()

@@ -411,7 +411,7 @@ class ContentResolverHelper @Inject constructor(
         )
 
         // Sort albums by name
-        val sortOrder = "${MediaStore.Audio.Media.ALBUM} DESC"
+        val sortOrder = "${MediaStore.Audio.Media.ALBUM} ASC"
 
         cursor = contentResolver.query(
             collection,

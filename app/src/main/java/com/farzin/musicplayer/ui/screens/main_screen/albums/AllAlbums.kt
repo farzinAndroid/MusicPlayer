@@ -1,15 +1,21 @@
 package com.farzin.musicplayer.ui.screens.main_screen.albums
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 
 @Composable
@@ -21,17 +27,38 @@ fun AllAlbums(
 
     val albums by allSongsViewModel.allAlbums.collectAsState()
 
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(3),
-        content = {
-            items(albums){ album->
-                AlbumCard(
-                    album = album,
-                    onClick = {
-                        navController.navigate(Screens.Album.route + "?albumId=${album.albumId}")
-                    }
-                )
-            }
+    var showDialog by remember { mutableStateOf(false) }
+    var albumId by remember { mutableLongStateOf(0L) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        if (showDialog) {
+            AlbumDialog(
+                albumId = albumId,
+                allSongsViewModel = allSongsViewModel,
+                onDismissRequest = {
+                    showDialog = false
+                })
         }
-    )
+
+
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(3),
+            content = {
+                items(albums) { album ->
+                    AlbumCard(
+                        album = album,
+                        onClick = {
+                            showDialog = true
+                            albumId = album.albumId
+                        }
+                    )
+                }
+            }
+        )
+    }
+
+
 }
