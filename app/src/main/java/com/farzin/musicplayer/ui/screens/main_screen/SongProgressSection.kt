@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,13 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.farzin.musicplayer.ui.theme.darkText
+import com.farzin.musicplayer.ui.theme.lightGray
 import com.farzin.musicplayer.utils.SliderHelper.convertForAudioWave
 import com.farzin.musicplayer.utils.TimeHelper.formatSongProgress
 import com.farzin.musicplayer.utils.TimeHelper.stampTimeToDuration
 import com.linc.audiowaveform.AudioWaveform
 import com.linc.audiowaveform.model.AmplitudeType
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun SongProgressSection(
     songProgress: Long,
@@ -68,9 +68,9 @@ fun SongProgressSection(
                 .weight(0.6f)
                 .padding(vertical = 10.dp),
             amplitudeType = AmplitudeType.Min,
-            spikeWidth = 4.dp,
+            spikeWidth = 3.dp,
             progressBrush = SolidColor(progressColor),
-            waveformBrush = SolidColor(MaterialTheme.colorScheme.darkText),
+            waveformBrush = SolidColor(MaterialTheme.colorScheme.lightGray),
         )
 
         Text(

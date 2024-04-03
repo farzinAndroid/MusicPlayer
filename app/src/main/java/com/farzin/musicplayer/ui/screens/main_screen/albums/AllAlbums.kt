@@ -9,13 +9,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.farzin.musicplayer.data.model.MusicAlbum
 import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 
 @Composable
@@ -28,7 +28,7 @@ fun AllAlbums(
     val albums by allSongsViewModel.allAlbums.collectAsState()
 
     var showDialog by remember { mutableStateOf(false) }
-    var albumId by remember { mutableLongStateOf(0L) }
+    var selectedAlbum by remember { mutableStateOf(MusicAlbum()) }
 
     Column(
         modifier = Modifier
@@ -36,7 +36,7 @@ fun AllAlbums(
     ) {
         if (showDialog) {
             AlbumDialog(
-                albumId = albumId,
+               album = selectedAlbum,
                 allSongsViewModel = allSongsViewModel,
                 onDismissRequest = {
                     showDialog = false
@@ -52,7 +52,7 @@ fun AllAlbums(
                         album = album,
                         onClick = {
                             showDialog = true
-                            albumId = album.albumId
+                            selectedAlbum = it
                         }
                     )
                 }

@@ -77,7 +77,7 @@ fun FullScreenSongController(
                     onPauseClicked()
                 }, onDraw = {
                 drawCircle(
-                    color = Color.LightGray
+                    color = Color.Gray
                 )
             })
 

@@ -32,7 +32,7 @@ import com.farzin.musicplayer.ui.theme.searchBarColor
 @Composable
 fun AlbumCard(
     album: MusicAlbum,
-    onClick: (Long) -> Unit,
+    onClick: (MusicAlbum) -> Unit,
 ) {
 
 
@@ -57,7 +57,7 @@ fun AlbumCard(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    onClick(album.albumId)
+                    onClick(album)
                 }
         ) {
             Image(

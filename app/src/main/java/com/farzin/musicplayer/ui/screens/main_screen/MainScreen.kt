@@ -201,8 +201,7 @@ fun MainScreen(
     )
 
 }
-
-private fun emptyMusic():Music = Music(
+fun emptyMusic():Music = Music(
     "", "No song", 0L, "", "", 0, "No song"
 )
 

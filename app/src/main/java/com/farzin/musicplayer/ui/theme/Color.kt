@@ -30,3 +30,11 @@ val ColorScheme.darkText: Color
 val ColorScheme.likeColor: Color
     @Composable
     get() = Color(0xFFDD0000)
+
+val ColorScheme.albumPlayColor: Color
+    @Composable
+    get() = Color(0xFF00D5A9)
+
+val ColorScheme.lightGray: Color
+    @Composable
+    get() = Color(0xFF9E9E9E)
