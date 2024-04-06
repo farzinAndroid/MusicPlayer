@@ -17,7 +17,8 @@ class DataStoreViewModel @Inject constructor(
 
 
     companion object{
-        val SORT_KEY = "SORT_KEY"
+        const val SORT_KEY = "SORT_KEY"
+        const val REPEAT_MODE_KEY = "REPEAT_MODE_KEY"
     }
 
 
@@ -30,5 +31,14 @@ class DataStoreViewModel @Inject constructor(
     fun getSort() : Int = runBlocking {
         repo.getInt(SORT_KEY) ?: 1
     }
+
+    fun saveRepeatMode(value:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.putInt(REPEAT_MODE_KEY,value)
+        }
+    }
+
+
+    suspend fun getRepeatMode(): Int = repo.getInt(REPEAT_MODE_KEY) ?: 0
 
 }

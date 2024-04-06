@@ -69,6 +69,13 @@ class SongServiceHandler @Inject constructor(
             is PlayerEvent.UpdateProgress -> {
                 exoPlayer.seekTo((exoPlayer.duration * playerEvent.newProgress).toLong())
             }
+            is PlayerEvent.RepeatMode ->{
+                if (playerEvent.repeatMode == 0){
+                    exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_OFF
+                }else{
+                    exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ONE
+                }
+            }
         }
     }
 

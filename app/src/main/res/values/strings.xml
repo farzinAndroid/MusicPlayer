@@ -9,4 +9,5 @@
     <string name="name_asc">Name asc</string>
     <string name="date_added_desc">Date added desc</string>
     <string name="date_added_asc">Date added asc</string>
+    <string name="music_player">Music Player</string>
 </resources>

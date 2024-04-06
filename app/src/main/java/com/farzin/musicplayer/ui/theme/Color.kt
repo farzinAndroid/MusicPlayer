@@ -33,7 +33,7 @@ val ColorScheme.likeColor: Color
 
 val ColorScheme.albumPlayColor: Color
     @Composable
-    get() = Color(0xFF00D5A9)
+    get() = if (isSystemInDarkTheme()) Color(0xFF028A6E) else  Color(0xFF00D5A9)
 
 val ColorScheme.lightGray: Color
     @Composable

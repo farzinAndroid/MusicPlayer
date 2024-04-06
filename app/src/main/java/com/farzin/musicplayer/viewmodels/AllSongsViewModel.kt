@@ -201,6 +201,9 @@ class AllSongsViewModel @Inject constructor(
                     songServiceHandler.onPlayerEvents(PlayerEvent.UpdateProgress(uiEvents.newProgress))
                     sliderProgress.emit(uiEvents.newProgress)
                 }
+                is UIEvents.SetRepeatMode ->{
+                    songServiceHandler.onPlayerEvents(PlayerEvent.RepeatMode(uiEvents.repeatMode))
+                }
             }
         }
     }
@@ -272,6 +275,7 @@ sealed class UIEvents {
     data object SeekToPrevious : UIEvents()
     data class SeekTo(val position: Float) : UIEvents()
     data class UpdateProgress(val newProgress: Float) : UIEvents()
+    data class SetRepeatMode(val repeatMode: Int) : UIEvents()
 }
 
 sealed class UIState{

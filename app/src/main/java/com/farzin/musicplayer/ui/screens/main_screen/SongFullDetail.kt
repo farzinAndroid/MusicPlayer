@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.ui.components.MySpacerHeight
+import com.farzin.musicplayer.ui.theme.albumPlayColor
 import com.farzin.musicplayer.ui.theme.mainBackground
 import com.farzin.musicplayer.utils.PaletteGenerator
 
@@ -52,7 +53,6 @@ fun SongFullDetail(
     onPauseClicked: () -> Unit,
     currentSelectedSong: Music,
     isPlaying: Boolean,
-    onRepeatClicked: () -> Unit,
     imagePainter: AsyncImagePainter,
     onCloseClicked: () -> Unit,
     amplitudes: List<Int>,
@@ -205,7 +205,7 @@ fun SongFullDetail(
                 duration = currentSelectedSong.duration.toLong(),
                 sliderProgress = sliderProgress,
                 amplitudes = amplitudes,
-                progressColor = backGroundColor
+                progressColor = MaterialTheme.colorScheme.albumPlayColor
             )
 
             MySpacerHeight(height = 20.dp)
@@ -214,8 +214,7 @@ fun SongFullDetail(
                 isPlaying = isPlaying,
                 onNextClicked = onNextClicked,
                 onPreviousClicked = onPreviousClicked,
-                onPauseClicked = onPauseClicked,
-                onRepeatClicked = onRepeatClicked
+                onPauseClicked = onPauseClicked
             )
         }
 

@@ -31,7 +31,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
-import com.farzin.musicplayer.nav_graph.Screens
 import com.farzin.musicplayer.utils.SliderHelper.convertBackToRange
 import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
@@ -159,7 +158,6 @@ fun MainScreen(
                 },
                 currentSelectedSong = currentSelectedSong ?: emptyMusic(),
                 isPlaying = isPlaying,
-                onRepeatClicked = { /*TODO*/ },
                 imagePainter = imagePainter,
                 onCloseClicked = {
                     if (isExpanded){
@@ -179,10 +177,7 @@ fun MainScreen(
         scaffoldState = scaffoldState,
         topBar = {
             TopSearchSection(
-                onFilterClicked = { showSortDialogue = true },
-                onCardClicked = {
-                    navController.navigate(Screens.Search.route)
-                }
+                onFilterClicked = { showSortDialogue = true }
             )
         },
         sheetPeekHeight = 60.dp,

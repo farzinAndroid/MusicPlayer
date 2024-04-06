@@ -1,5 +1,6 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,29 +14,58 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.RepeatOne
+import androidx.compose.material.icons.rounded.RepeatOneOn
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.farzin.musicplayer.ui.theme.darkText
 import com.farzin.musicplayer.ui.theme.likeColor
+import com.farzin.musicplayer.viewmodels.AllSongsViewModel
+import com.farzin.musicplayer.viewmodels.DataStoreViewModel
+import com.farzin.musicplayer.viewmodels.UIEvents
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun FullScreenSongController(
     isPlaying: Boolean,
     onNextClicked: () -> Unit,
     onPreviousClicked: () -> Unit,
     onPauseClicked: () -> Unit,
-    onRepeatClicked: () -> Unit,
+    dataStoreViewModel: DataStoreViewModel = hiltViewModel(),
+    allSongsViewModel: AllSongsViewModel = hiltViewModel(),
 ) {
+
+    val scope = rememberCoroutineScope()
+
+    var repeatMode by remember { mutableStateOf(false) }
+    LaunchedEffect(true) {
+        repeatMode = dataStoreViewModel.getRepeatMode() == 1
+
+    }
+
+    LaunchedEffect(true) {
+        allSongsViewModel.onUIEvent(UIEvents.SetRepeatMode(dataStoreViewModel.getRepeatMode()))
+    }
+
 
     Row(
         modifier = Modifier
@@ -44,9 +74,23 @@ fun FullScreenSongController(
         horizontalArrangement = Arrangement.Absolute.SpaceEvenly
     ) {
 
-        IconButton(onClick = onRepeatClicked) {
+        IconButton(onClick = {
+            repeatMode = !repeatMode
+            if (repeatMode) {
+                dataStoreViewModel.saveRepeatMode(1)
+            } else {
+                dataStoreViewModel.saveRepeatMode(0)
+            }
+
+            scope.launch(Dispatchers.IO) {
+                delay(200)
+                allSongsViewModel.onUIEvent(UIEvents.SetRepeatMode(dataStoreViewModel.getRepeatMode()))
+            }
+
+        }
+        ) {
             Icon(
-                imageVector = Icons.Rounded.Repeat,
+                imageVector = if (!repeatMode) Icons.Rounded.RepeatOne else Icons.Rounded.RepeatOneOn,
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp),
@@ -107,7 +151,9 @@ fun FullScreenSongController(
 
 
 
-        IconButton(onClick = onRepeatClicked) {
+        IconButton(onClick = {
+
+        }) {
             Icon(
                 imageVector = Icons.Rounded.FavoriteBorder,
                 contentDescription = "",
