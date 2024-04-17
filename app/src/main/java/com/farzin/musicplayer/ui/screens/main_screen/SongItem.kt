@@ -1,8 +1,10 @@
 package com.farzin.musicplayer.ui.screens.main_screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -29,10 +31,10 @@ import com.farzin.musicplayer.ui.components.MySpacerHeight
 import com.farzin.musicplayer.ui.theme.darkText
 
 @Composable
-fun SongItem(music: Music, onMusicClicked: () -> Unit) {
+fun SongItem(music: Music, onMusicClicked: (Music) -> Unit, currentSelectedSong: Music) {
 
 
-
+    val isCurrentSong = currentSelectedSong == music
 
     val imagePainter = rememberAsyncImagePainter(
         model = music.albumArt,
@@ -47,8 +49,9 @@ fun SongItem(music: Music, onMusicClicked: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
+            .background(if (isCurrentSong) Color.Red else Color.Transparent)
             .clickable {
-                onMusicClicked()
+                onMusicClicked(music)
             }
     ) {
 
@@ -68,7 +71,12 @@ fun SongItem(music: Music, onMusicClicked: () -> Unit) {
                 .fillMaxHeight()
                 .padding(start = 4.dp)
         ) {
-            Column(modifier = Modifier.weight(0.95f)) {
+            Column(
+                modifier = Modifier
+                    .weight(0.95f)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
 
                 Text(
                     text = music.title,

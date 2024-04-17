@@ -6,23 +6,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.farzin.musicplayer.data.model.Music
 
 @Composable
 fun InitLazyColumn(
-    songList:List<Music>,
+    songList: List<Music>,
     paddingValues: PaddingValues,
-    onClick:(Int)->Unit
+    onClick: (Int) -> Unit,
+    currentSelectedSong: Music,
 ) {
+
     LazyColumn(
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
     ) {
         itemsIndexed(songList) { index, music ->
-            SongItem(music = music, onMusicClicked = {
-                onClick(index)
-            })
+            SongItem(
+                music = music,
+                onMusicClicked = {
+                    onClick(index)
+                },
+                currentSelectedSong
+            )
         }
 
     }

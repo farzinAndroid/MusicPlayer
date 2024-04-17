@@ -1,6 +1,7 @@
 package com.farzin.musicplayer.data.datastore
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -27,6 +28,24 @@ class DataStoreRepositoryImpl @Inject constructor(
 
     override suspend fun putInt(key: String, value: Int) {
         val preferenceKey = intPreferencesKey(key)
+        context.dataStore.edit {
+            it[preferenceKey] = value
+        }
+    }
+
+    override suspend fun getBoolean(key: String): Boolean? {
+        return try {
+            val preferenceKey = booleanPreferencesKey(key)
+            val preferences = context.dataStore.data.first()
+            preferences[preferenceKey]
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    override suspend fun putBoolean(key: String, value: Boolean) {
+        val preferenceKey = booleanPreferencesKey(key)
         context.dataStore.edit {
             it[preferenceKey] = value
         }

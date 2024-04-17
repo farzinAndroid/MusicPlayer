@@ -33,6 +33,7 @@ import com.farzin.musicplayer.R
 import com.farzin.musicplayer.data.model.Music
 import com.farzin.musicplayer.data.model.MusicAlbum
 import com.farzin.musicplayer.ui.screens.main_screen.InitLazyColumn
+import com.farzin.musicplayer.ui.screens.main_screen.emptyMusic
 import com.farzin.musicplayer.ui.theme.mainBackground
 import com.farzin.musicplayer.ui.theme.searchBarColor
 import com.farzin.musicplayer.viewmodels.AllSongsViewModel
@@ -138,7 +139,8 @@ fun AlbumDialog(
                                 allSongsViewModel.isServiceRunning = true
                             }
                         }
-                    }
+                    },
+                    currentSelectedSong = currentSelectedSong ?: emptyMusic()
                 )
             }
         }

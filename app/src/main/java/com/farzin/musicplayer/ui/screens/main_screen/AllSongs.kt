@@ -74,7 +74,8 @@ fun AllSongs(
                                     allSongsViewModel.isServiceRunning = true
                                 }
                             }
-                        }
+                        },
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
                     )
                 }
                 2->{
@@ -95,7 +96,8 @@ fun AllSongs(
                                     allSongsViewModel.isServiceRunning = true
                                 }
                             }
-                        }
+                        },
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
                     )
                 }
                 3->{
@@ -116,7 +118,8 @@ fun AllSongs(
                                     allSongsViewModel.isServiceRunning = true
                                 }
                             }
-                        }
+                        },
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
                     )
                 }
                 4->{
@@ -137,7 +140,8 @@ fun AllSongs(
                                     allSongsViewModel.isServiceRunning = true
                                 }
                             }
-                        }
+                        },
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
                     )
                 }
             }

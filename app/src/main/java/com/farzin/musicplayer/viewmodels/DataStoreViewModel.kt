@@ -19,6 +19,7 @@ class DataStoreViewModel @Inject constructor(
     companion object{
         const val SORT_KEY = "SORT_KEY"
         const val REPEAT_MODE_KEY = "REPEAT_MODE_KEY"
+        const val SHUFFLE_MODE_KEY = "SHUFFLE_MODE_KEY"
     }
 
 
@@ -40,5 +41,13 @@ class DataStoreViewModel @Inject constructor(
 
 
     suspend fun getRepeatMode(): Int = repo.getInt(REPEAT_MODE_KEY) ?: 0
+
+    fun saveShuffleMode(value:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.putInt(SHUFFLE_MODE_KEY,value)
+        }
+    }
+
+    suspend fun getShuffleMode() : Int = repo.getInt(SHUFFLE_MODE_KEY) ?: 0
 
 }

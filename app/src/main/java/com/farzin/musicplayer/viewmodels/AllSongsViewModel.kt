@@ -204,6 +204,9 @@ class AllSongsViewModel @Inject constructor(
                 is UIEvents.SetRepeatMode ->{
                     songServiceHandler.onPlayerEvents(PlayerEvent.RepeatMode(uiEvents.repeatMode))
                 }
+                is UIEvents.SetShuffleMode -> {
+                    songServiceHandler.onPlayerEvents(PlayerEvent.ShuffleMode(uiEvents.shuffleMode))
+                }
             }
         }
     }
@@ -276,6 +279,7 @@ sealed class UIEvents {
     data class SeekTo(val position: Float) : UIEvents()
     data class UpdateProgress(val newProgress: Float) : UIEvents()
     data class SetRepeatMode(val repeatMode: Int) : UIEvents()
+    data class SetShuffleMode(val shuffleMode: Int) : UIEvents()
 }
 
 sealed class UIState{

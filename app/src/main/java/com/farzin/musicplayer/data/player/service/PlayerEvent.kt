@@ -10,5 +10,6 @@ sealed class PlayerEvent {
     data object Stop : PlayerEvent()
     data class UpdateProgress(val newProgress:Float) : PlayerEvent()
     data class RepeatMode(val repeatMode:Int) : PlayerEvent()
+    data class ShuffleMode(val shuffleMode:Int) : PlayerEvent()
 
 }

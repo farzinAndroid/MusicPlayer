@@ -11,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.RepeatOne
 import androidx.compose.material.icons.rounded.RepeatOneOn
+import androidx.compose.material.icons.rounded.Shuffle
+import androidx.compose.material.icons.rounded.ShuffleOn
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Icon
@@ -35,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.farzin.musicplayer.ui.theme.darkText
-import com.farzin.musicplayer.ui.theme.likeColor
 import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 import com.farzin.musicplayer.viewmodels.DataStoreViewModel
 import com.farzin.musicplayer.viewmodels.UIEvents
@@ -59,13 +59,14 @@ fun FullScreenSongController(
     var repeatMode by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
         repeatMode = dataStoreViewModel.getRepeatMode() == 1
-
-    }
-
-    LaunchedEffect(true) {
         allSongsViewModel.onUIEvent(UIEvents.SetRepeatMode(dataStoreViewModel.getRepeatMode()))
     }
 
+    var shuffleMode by remember { mutableStateOf(false) }
+    LaunchedEffect(true) {
+        shuffleMode = dataStoreViewModel.getShuffleMode() == 1
+        allSongsViewModel.onUIEvent(UIEvents.SetShuffleMode(dataStoreViewModel.getShuffleMode()))
+    }
 
     Row(
         modifier = Modifier
@@ -152,14 +153,26 @@ fun FullScreenSongController(
 
 
         IconButton(onClick = {
+            shuffleMode = !shuffleMode
+            if (shuffleMode) {
+                dataStoreViewModel.saveShuffleMode(1)
+            } else {
+                dataStoreViewModel.saveShuffleMode(0)
+            }
+
+
+            scope.launch(Dispatchers.IO) {
+                delay(200)
+                allSongsViewModel.onUIEvent(UIEvents.SetShuffleMode(dataStoreViewModel.getShuffleMode()))
+            }
 
         }) {
             Icon(
-                imageVector = Icons.Rounded.FavoriteBorder,
+                imageVector = if (shuffleMode) Icons.Rounded.ShuffleOn else Icons.Rounded.Shuffle,
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp),
-                tint = MaterialTheme.colorScheme.likeColor
+                tint = MaterialTheme.colorScheme.darkText
             )
         }
 

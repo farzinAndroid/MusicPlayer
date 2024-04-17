@@ -76,6 +76,14 @@ class SongServiceHandler @Inject constructor(
                     exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ONE
                 }
             }
+
+            is PlayerEvent.ShuffleMode -> {
+                if (playerEvent.shuffleMode == 0){
+                    exoPlayer.shuffleModeEnabled = false
+                }else{
+                    exoPlayer.shuffleModeEnabled = true
+                }
+            }
         }
     }
 
