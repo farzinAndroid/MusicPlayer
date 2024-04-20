@@ -52,6 +52,7 @@ fun AlbumDialog(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val currentSelectedSong by allSongsViewModel.currentSelectedSong.collectAsState()
+    val isPlaying by allSongsViewModel.isPlaying.collectAsState()
 
 
     LaunchedEffect(album.albumId) {
@@ -140,7 +141,8 @@ fun AlbumDialog(
                             }
                         }
                     },
-                    currentSelectedSong = currentSelectedSong ?: emptyMusic()
+                    currentSelectedSong = currentSelectedSong ?: emptyMusic(),
+                    isPlaying = isPlaying
                 )
             }
         }

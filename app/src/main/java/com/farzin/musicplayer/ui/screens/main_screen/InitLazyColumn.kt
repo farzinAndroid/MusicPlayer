@@ -15,6 +15,7 @@ fun InitLazyColumn(
     paddingValues: PaddingValues,
     onClick: (Int) -> Unit,
     currentSelectedSong: Music,
+    isPlaying: Boolean,
 ) {
 
     LazyColumn(
@@ -28,7 +29,8 @@ fun InitLazyColumn(
                 onMusicClicked = {
                     onClick(index)
                 },
-                currentSelectedSong
+                currentSelectedSong = currentSelectedSong,
+                isPlaying = isPlaying
             )
         }
 

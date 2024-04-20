@@ -37,6 +37,7 @@ fun AllSongs(
     val musicListNameDesc by allSongsViewModel.musicListNameDesc.collectAsState()
     val musicListNameAsc by allSongsViewModel.musicListNameAsc.collectAsState()
     val currentSelectedSong by allSongsViewModel.currentSelectedSong.collectAsState()
+    val isPlaying by allSongsViewModel.isPlaying.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -75,7 +76,8 @@ fun AllSongs(
                                 }
                             }
                         },
-                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic(),
+                        isPlaying = isPlaying
                     )
                 }
                 2->{
@@ -97,7 +99,8 @@ fun AllSongs(
                                 }
                             }
                         },
-                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic(),
+                        isPlaying = isPlaying
                     )
                 }
                 3->{
@@ -119,7 +122,8 @@ fun AllSongs(
                                 }
                             }
                         },
-                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic(),
+                        isPlaying = isPlaying
                     )
                 }
                 4->{
@@ -141,7 +145,8 @@ fun AllSongs(
                                 }
                             }
                         },
-                        currentSelectedSong = currentSelectedSong ?: emptyMusic()
+                        currentSelectedSong = currentSelectedSong ?: emptyMusic(),
+                        isPlaying = isPlaying
                     )
                 }
             }

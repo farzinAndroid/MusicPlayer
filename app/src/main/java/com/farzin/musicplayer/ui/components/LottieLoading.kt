@@ -9,13 +9,15 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.farzin.musicplayer.R
 
 @Composable
-fun LottieLoading(modifier: Modifier = Modifier) {
+fun LottieLoading(modifier: Modifier = Modifier,isPlaying:Boolean = true) {
 
     val lottie by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading))
 
     LottieAnimation(
         composition = lottie,
-        modifier = modifier
+        modifier = modifier,
+        isPlaying = isPlaying,
+        iterations = Int.MAX_VALUE
     )
 
 }
