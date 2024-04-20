@@ -13,10 +13,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.RepeatOne
-import androidx.compose.material.icons.rounded.RepeatOneOn
-import androidx.compose.material.icons.rounded.Shuffle
-import androidx.compose.material.icons.rounded.ShuffleOn
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Icon
@@ -33,8 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.farzin.musicplayer.R
+import com.farzin.musicplayer.ui.theme.albumPlayColor
 import com.farzin.musicplayer.ui.theme.darkText
 import com.farzin.musicplayer.viewmodels.AllSongsViewModel
 import com.farzin.musicplayer.viewmodels.DataStoreViewModel
@@ -91,11 +90,11 @@ fun FullScreenSongController(
         }
         ) {
             Icon(
-                imageVector = if (!repeatMode) Icons.Rounded.RepeatOne else Icons.Rounded.RepeatOneOn,
+                painter = painterResource(R.drawable.repeat),
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp),
-                tint = MaterialTheme.colorScheme.darkText
+                tint =  if (!repeatMode) MaterialTheme.colorScheme.darkText else MaterialTheme.colorScheme.albumPlayColor
             )
         }
 
@@ -168,11 +167,11 @@ fun FullScreenSongController(
 
         }) {
             Icon(
-                imageVector = if (shuffleMode) Icons.Rounded.ShuffleOn else Icons.Rounded.Shuffle,
+                painter = painterResource(R.drawable.shuffle),
                 contentDescription = "",
                 modifier = Modifier
                     .size(30.dp),
-                tint = MaterialTheme.colorScheme.darkText
+                tint = if (!shuffleMode) MaterialTheme.colorScheme.darkText else MaterialTheme.colorScheme.albumPlayColor
             )
         }
 
